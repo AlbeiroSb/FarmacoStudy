@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FarmacoRepaso · Libro de Estudio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#d4799a;--rose-l:#fce8f0;--rose-d:#8a3c5a;
+  --teal:#3aba8a;--teal-l:#e6f9f2;--teal-d:#1a6a4a;
+  --blue:#4a7ec8;--blue-l:#eaf2fc;--blue-d:#1a3c78;
+  --orange:#e8943a;--orange-l:#fff4e6;--orange-d:#8a4a10;
+  --gold:#c9960a;--gold-l:#fffbe6;
+  --text:#1e1e2e;--muted:#6a6a7a;--border:#f0e0e8;
+  --bg:#fafaf8;--card:#fff;
+  --r:14px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
+
+/* ── STICKY NAV ── */
+.snav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:0;height:52px}
+.snav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose);font-weight:800;margin-right:24px;white-space:nowrap}
+.snav-links{display:flex;gap:4px;overflow-x:auto}
+.snl{text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:500;padding:6px 12px;border-radius:20px;white-space:nowrap;transition:all .2s}
+.snl:hover,.snl.active{background:var(--rose-l);color:var(--rose-d)}
+.snl.m2:hover,.snl.m2.active{background:var(--teal-l);color:var(--teal-d)}
+.snl.m3:hover,.snl.m3.active{background:var(--blue-l);color:var(--blue-d)}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(135deg,#fdfafa 0%,#fce8f0 50%,#e8f4fc 100%);padding:72px 24px 56px;text-align:center;border-bottom:1.5px solid var(--border)}
+.cover-badge{display:inline-block;background:var(--rose);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:20px}
+.cover h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.4rem);color:var(--text);line-height:1.15;margin-bottom:12px}
+.cover h1 span{color:var(--rose)}
+.cover-sub{color:var(--muted);font-size:1rem;max-width:560px;margin:0 auto 32px}
+.cover-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:20px;font-size:.82rem;font-weight:600}
+.pill-1{background:var(--rose-l);color:var(--rose-d)}
+.pill-2{background:var(--teal-l);color:var(--teal-d)}
+.pill-3{background:var(--blue-l);color:var(--blue-d)}
+
+/* ── WRAPPER ── */
+.book{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+/* ── MODULE HEADER ── */
+.mh{padding:56px 0 32px;display:flex;align-items:flex-start;gap:18px}
+.mh-num{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;flex-shrink:0}
+.mh-num.m1{background:var(--rose);color:#fff}
+.mh-num.m2{background:var(--teal);color:#fff}
+.mh-num.m3{background:var(--blue);color:#fff}
+.mh-info{}
+.mh-tag{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.mh-tag.m1{color:var(--rose)}
+.mh-tag.m2{color:var(--teal-d)}
+.mh-tag.m3{color:var(--blue-d)}
+.mh h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3.5vw,2.1rem);line-height:1.2;margin-bottom:6px}
+.mh-desc{color:var(--muted);font-size:.9rem}
+
+/* ── DIVIDER ── */
+.div-m{height:2px;border-radius:2px;margin-bottom:32px}
+.div-m.m1{background:linear-gradient(90deg,var(--rose),transparent)}
+.div-m.m2{background:linear-gradient(90deg,var(--teal),transparent)}
+.div-m.m3{background:linear-gradient(90deg,var(--blue),transparent)}
+
+/* ── PROSE ── */
+.prose{font-size:.97rem;line-height:1.8;color:var(--text);margin-bottom:20px}
+.prose strong{color:var(--text);font-weight:700}
+h3.sh{font-size:1.05rem;font-weight:700;margin:28px 0 12px;padding-left:12px}
+h3.sh.m1{border-left:3px solid var(--rose)}
+h3.sh.m2{border-left:3px solid var(--teal)}
+h3.sh.m3{border-left:3px solid var(--blue)}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:var(--r);padding:16px 20px;margin:20px 0;display:flex;gap:14px;align-items:flex-start}
+.co-ico{font-size:1.3rem;flex-shrink:0;margin-top:1px}
+.co-body{}
+.co-title{font-weight:700;font-size:.88rem;margin-bottom:4px}
+.co-text{font-size:.9rem;line-height:1.65}
+.callout.tip{background:var(--gold-l);border:1.5px solid #f0d060}
+.callout.tip .co-title{color:var(--gold)}
+.callout.warn{background:#fff0f0;border:1.5px solid #f0c0c0}
+.callout.warn .co-title{color:#c03060}
+.callout.key{background:var(--rose-l);border:1.5px solid #f0c8dc}
+.callout.key .co-title{color:var(--rose-d)}
+.callout.keyt{background:var(--teal-l);border:1.5px solid #a0dcc0}
+.callout.keyt .co-title{color:var(--teal-d)}
+.callout.keyb{background:var(--blue-l);border:1.5px solid #a0c0e8}
+.callout.keyb .co-title{color:var(--blue-d)}
+
+/* ── DIAGRAM CARD ── */
+.dc{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin:24px 0}
+.dc-hdr{padding:12px 18px 10px;font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.dc-hdr.m1{background:var(--rose-l);color:var(--rose-d)}
+.dc-hdr.m2{background:var(--teal-l);color:var(--teal-d)}
+.dc-hdr.m3{background:var(--blue-l);color:var(--blue-d)}
+.dc svg{display:block;width:100%;padding:16px 12px}
+
+/* ── FACT GRID ── */
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:20px 0}
+.fc-item{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 14px}
+.fc-item .fi-ico{font-size:1.4rem;margin-bottom:8px}
+.fc-item .fi-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px}
+.fc-item .fi-val{font-size:.95rem;font-weight:600;line-height:1.4}
+
+/* ── TABLE ── */
+.rtbl{width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem}
+.rtbl th{padding:10px 12px;text-align:left;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.rtbl td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;line-height:1.55}
+.rtbl tr:last-child td{border-bottom:1px solid var(--border)}
+.rtbl.t1 th{background:var(--rose-l);color:var(--rose-d)}
+.rtbl.t2 th{background:var(--teal-l);color:var(--teal-d)}
+.rtbl.t3 th{background:var(--blue-l);color:var(--blue-d)}
+.rtbl tr:hover td{background:#fafafa}
+.tag-ok{display:inline-block;background:#e6f9f0;color:#1a7a4a;border-radius:4px;padding:1px 7px;font-size:.78rem;font-weight:600}
+.tag-warn{display:inline-block;background:#fff0f0;color:#c03060;border-radius:4px;padding:1px 7px;font-size:.78rem;font-weight:600}
+.tag-mid{display:inline-block;background:var(--orange-l);color:var(--orange-d);border-radius:4px;padding:1px 7px;font-size:.78rem;font-weight:600}
+
+/* ── COMPARISON PILLS ── */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.cmp-col{border-radius:12px;padding:16px;font-size:.88rem}
+.cmp-col h4{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.cmp-col ul{list-style:none;padding:0}
+.cmp-col ul li{padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.cmp-col ul li:last-child{border:none}
+.cmp-l{background:var(--rose-l);border:1.5px solid #f0c8dc}
+.cmp-l h4{color:var(--rose-d)}
+.cmp-r{background:var(--teal-l);border:1.5px solid #a0dcc0}
+.cmp-r h4{color:var(--teal-d)}
+
+/* ── SECTION SEPARATOR ── */
+.sep{height:60px;display:flex;align-items:center;justify-content:center;color:var(--border);font-size:1.5rem;letter-spacing:.3em}
+
+/* ── TIMELINE (generaciones) ── */
+.tl{margin:20px 0}
+.tl-item{display:flex;gap:16px;padding-bottom:24px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;flex-shrink:0;border:2px solid}
+.tl-dot.g1{background:var(--rose-l);color:var(--rose-d);border-color:var(--rose)}
+.tl-dot.g2{background:var(--teal-l);color:var(--teal-d);border-color:var(--teal)}
+.tl-dot.g3{background:var(--blue-l);color:var(--blue-d);border-color:var(--blue)}
+.tl-body{}
+.tl-gen{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.tl-gen.g1{color:var(--rose-d)}
+.tl-gen.g2{color:var(--teal-d)}
+.tl-gen.g3{color:var(--blue-d)}
+.tl-drugs{font-weight:600;font-size:.95rem;margin-bottom:4px}
+.tl-detail{font-size:.87rem;color:var(--muted);line-height:1.55}
+
+@media(max-width:600px){.cmp{grid-template-columns:1fr}.fg{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<nav class="snav">
+  <div class="snav-logo">📖 FarmacoRepaso</div>
+  <div class="snav-links">
+    <a href="#mod1" class="snl active">💊 Antihistamínicos</a>
+    <a href="#mod2" class="snl m2">🧬 Corticosteroides</a>
+    <a href="#mod3" class="snl m3">⚗️ Analgésicos / AINEs</a>
+  </div>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Farmacología · Odontología · Parcial 2026</div>
+  <h1>El libro que necesitas<br><span>antes del parcial</span></h1>
+  <p class="cover-sub">Resumen visual de los 4 PDFs del curso. Texto corto, diagramas clave y lo que sí o sí entra al examen.</p>
+  <div class="cover-pills">
+    <span class="pill pill-1">💊 Antihistamínicos</span>
+    <span class="pill pill-2">🧬 Corticosteroides</span>
+    <span class="pill pill-3">⚗️ Analgésicos + AINEs</span>
+  </div>
+</div>
+
+<div class="book">
+
+<!-- ══════════════ MÓDULO 1 ══════════════ -->
+<div id="mod1">
+<div class="mh">
+  <div class="mh-num m1">1</div>
+  <div class="mh-info">
+    <div class="mh-tag m1">Módulo 1 · PDF Antihistamínicos</div>
+    <h2>Antihistamínicos</h2>
+    <p class="mh-desc">Receptores de histamina · Generaciones H1 · Usos clínicos</p>
+  </div>
+</div>
+<div class="div-m m1"></div>
+
+<p class="prose">La <strong>histamina</strong> es una amina biógena almacenada en mastocitos y basófilos. Se libera ante estímulos alérgicos, infecciosos o físicos y actúa sobre cuatro tipos de receptores con funciones completamente distintas. Entender qué hace cada receptor explica por qué hay antihistamínicos para alergia, para úlceras y para insomnio.</p>
+
+<!-- RECEPTORES VISUAL -->
+<div class="dc">
+<div class="dc-hdr m1">🗺️ Los 4 receptores de histamina de un vistazo</div>
+<svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif">
+  <rect width="800" height="220" fill="#fdfafa"/>
+  <!-- H1 -->
+  <rect x="10" y="10" width="185" height="200" rx="12" fill="#fce8f0" stroke="#d4799a" stroke-width="2"/>
+  <rect x="10" y="10" width="185" height="38" rx="12" fill="#d4799a"/>
+  <rect x="10" y="36" width="185" height="12" fill="#d4799a"/>
+  <text x="102" y="34" text-anchor="middle" fill="white" font-size="15" font-weight="800">H1</text>
+  <text x="102" y="66" text-anchor="middle" fill="#8a3060" font-size="10" font-weight="700">Proteína Gq → ↑ IP₃/DAG</text>
+  <text x="102" y="86" text-anchor="middle" fill="#8a3060" font-size="10">Vasos · Bronquios · Piel · SNC</text>
+  <text x="22" y="108" fill="#7a4060" font-size="10">→ Vasodilatación</text>
+  <text x="22" y="124" fill="#7a4060" font-size="10">→ Broncoconstricción</text>
+  <text x="22" y="140" fill="#7a4060" font-size="10">→ Prurito / Urticaria</text>
+  <text x="22" y="156" fill="#7a4060" font-size="10">→ Edema</text>
+  <rect x="20" y="172" width="165" height="28" rx="6" fill="#d4799a"/>
+  <text x="102" y="190" text-anchor="middle" fill="white" font-size="10" font-weight="700">Diana antihistamínicos H1</text>
+  <!-- H2 -->
+  <rect x="205" y="10" width="185" height="200" rx="12" fill="#f0faf4" stroke="#3aba8a" stroke-width="2"/>
+  <rect x="205" y="10" width="185" height="38" rx="12" fill="#3aba8a"/>
+  <rect x="205" y="36" width="185" height="12" fill="#3aba8a"/>
+  <text x="297" y="34" text-anchor="middle" fill="white" font-size="15" font-weight="800">H2</text>
+  <text x="297" y="66" text-anchor="middle" fill="#1a6a4a" font-size="10" font-weight="700">Proteína Gs → ↑ AMPc</text>
+  <text x="297" y="86" text-anchor="middle" fill="#1a6a4a" font-size="10">Estómago · Corazón</text>
+  <text x="217" y="108" fill="#1a6a4a" font-size="10">→ ↑ Secreción ácida</text>
+  <text x="217" y="124" fill="#1a6a4a" font-size="10">→ ↑ FC, contractilidad</text>
+  <text x="217" y="140" fill="#1a6a4a" font-size="10">→ Vasodilatación</text>
+  <rect x="215" y="172" width="165" height="28" rx="6" fill="#3aba8a"/>
+  <text x="297" y="190" text-anchor="middle" fill="white" font-size="10" font-weight="700">Ranitidina · Famotidina</text>
+  <!-- H3 -->
+  <rect x="400" y="10" width="185" height="200" rx="12" fill="#f3eaff" stroke="#9b72cf" stroke-width="2"/>
+  <rect x="400" y="10" width="185" height="38" rx="12" fill="#9b72cf"/>
+  <rect x="400" y="36" width="185" height="12" fill="#9b72cf"/>
+  <text x="492" y="34" text-anchor="middle" fill="white" font-size="15" font-weight="800">H3</text>
+  <text x="492" y="66" text-anchor="middle" fill="#5a1a9a" font-size="10" font-weight="700">Proteína Gi → ↓ AMPc</text>
+  <text x="492" y="86" text-anchor="middle" fill="#5a1a9a" font-size="10">Presináptico SNC (autorreceptor)</text>
+  <text x="412" y="108" fill="#5a1a9a" font-size="10">→ ↓ Liberación histamina</text>
+  <text x="412" y="124" fill="#5a1a9a" font-size="10">→ ↓ NA, DA, ACh, 5-HT</text>
+  <text x="412" y="140" fill="#5a1a9a" font-size="10">→ Regula sueño/apetito</text>
+  <rect x="410" y="172" width="165" height="28" rx="6" fill="#9b72cf"/>
+  <text x="492" y="190" text-anchor="middle" fill="white" font-size="10" font-weight="700">En investigación (narcolepsia)</text>
+  <!-- H4 -->
+  <rect x="595" y="10" width="195" height="200" rx="12" fill="#eaf2fc" stroke="#4a7ec8" stroke-width="2"/>
+  <rect x="595" y="10" width="195" height="38" rx="12" fill="#4a7ec8"/>
+  <rect x="595" y="36" width="195" height="12" fill="#4a7ec8"/>
+  <text x="692" y="34" text-anchor="middle" fill="white" font-size="15" font-weight="800">H4</text>
+  <text x="692" y="66" text-anchor="middle" fill="#1a3c78" font-size="10" font-weight="700">Proteína Gi → ↓ AMPc</text>
+  <text x="692" y="86" text-anchor="middle" fill="#1a3c78" font-size="10">Células inmunes</text>
+  <text x="607" y="108" fill="#1a3c78" font-size="10">→ Eosinófilos / Mastocitos</text>
+  <text x="607" y="124" fill="#1a3c78" font-size="10">→ Quimiotaxis</text>
+  <text x="607" y="140" fill="#1a3c78" font-size="10">→ Prurito crónico alérgico</text>
+  <rect x="605" y="172" width="175" height="28" rx="6" fill="#4a7ec8"/>
+  <text x="692" y="190" text-anchor="middle" fill="white" font-size="10" font-weight="700">En investigación</text>
+</svg>
+</div>
+
+<div class="callout key">
+  <span class="co-ico">🎯</span>
+  <div class="co-body">
+    <div class="co-title">Lo que más importa sobre receptores</div>
+    <div class="co-text">Los antihistamínicos clínicos (los de alergia) son <strong>antagonistas H1</strong>. Los antiácidos tipo ranitidina son antagonistas H2. H3 y H4 no tienen fármacos de uso masivo aún. El acoplamiento proteico diferencia todo: <strong>Gq (H1) → IP₃ · Gs (H2) → ↑AMPc · Gi (H3/H4) → ↓AMPc.</strong></div>
+  </div>
+</div>
+
+<h3 class="sh m1">Las 3 generaciones de antihistamínicos H1</h3>
+<p class="prose">La principal evolución de los antihistamínicos H1 fue lograr <strong>selectividad periférica</strong> — evitar que cruzaran la barrera hematoencefálica — para eliminar la sedación.</p>
+
+<div class="tl">
+  <div class="tl-item">
+    <div class="tl-dot g1">1ª</div>
+    <div class="tl-body">
+      <div class="tl-gen g1">Primera generación · Sedantes</div>
+      <div class="tl-drugs">Difenhidramina · Clorfeniramina · Prometazina · Dexclorfeniramina</div>
+      <div class="tl-detail"><strong>Cruzan la BHE</strong> → antagonismo central H1 → <strong>sedación</strong>. Además tienen efecto anticolinérgico (boca seca, retención urinaria, taquicardia, estreñimiento). Prometazina es el antiemético más potente del grupo. Útiles en cinetosis, náuseas y cuando se busca sedación. <span class="tag-warn">CI: conductores, embarazo</span></div>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot g2">2ª</div>
+    <div class="tl-body">
+      <div class="tl-gen g2">Segunda generación · No sedantes</div>
+      <div class="tl-drugs">Loratadina · Cetirizina · Ebastina · Azelastina</div>
+      <div class="tl-detail"><strong>No cruzan BHE</strong> (o mínimamente) → sin sedación (cetirizina puede tener sedación leve). Mayor selectividad H1 periférico. Menos efectos anticolinérgicos. Una dosis al día. <span class="tag-ok">Mejor tolerados</span></div>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot g3">3ª</div>
+    <div class="tl-body">
+      <div class="tl-gen g3">Tercera generación · Metabolitos activos</div>
+      <div class="tl-drugs">Fexofenadina (de terfenadina) · Desloratadina (de loratadina) · Levocetirizina (de cetirizina)</div>
+      <div class="tl-detail">Son los <strong>metabolitos activos</strong> de 2ª gen. Mayor selectividad, eliminan la cardiotoxicidad de los precursores. Mejor perfil en embarazo. Sin sedación ni efectos anticolinérgicos. <span class="tag-ok">Mejor perfil de seguridad</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="callout warn">
+  <span class="co-ico">⚠️</span>
+  <div class="co-body">
+    <div class="co-title">Cimetidina: ojo con interacciones</div>
+    <div class="co-text">Es el único antihistamínico H2 que inhibe el citocromo P450 → múltiples interacciones farmacológicas (warfarina, fenitoína, etc.). Preferir <strong>ranitidina o famotidina</strong>.</div>
+  </div>
+</div>
+
+<h3 class="sh m1">Usos clínicos</h3>
+<table class="rtbl t1">
+  <tr><th>Uso</th><th>Generación preferida</th><th>Ejemplo</th></tr>
+  <tr><td>Rinitis alérgica / urticaria / dermatitis</td><td><span class="tag-ok">2ª / 3ª gen</span></td><td>Loratadina, Cetirizina, Fexofenadina</td></tr>
+  <tr><td>Conjuntivitis alérgica</td><td>2ª gen (tópica tb)</td><td>Cetirizina, Azelastina colirio</td></tr>
+  <tr><td>Anafilaxia (coadyuvante)</td><td>1ª gen IV/IM</td><td>Difenhidramina</td></tr>
+  <tr><td>Náuseas / vómito / cinetosis</td><td><span class="tag-warn">1ª gen</span></td><td>Difenhidramina, Prometazina</td></tr>
+  <tr><td>Prurito / insomnio</td><td>1ª gen</td><td>Difenhidramina, Doxilamina</td></tr>
+  <tr><td>Úlcera péptica / reflujo</td><td>Antagonistas H2</td><td>Ranitidina, Famotidina</td></tr>
+</table>
+</div>
+
+<!-- ══════════════ MÓDULO 2 ══════════════ -->
+<div class="sep">· · ·</div>
+<div id="mod2">
+<div class="mh">
+  <div class="mh-num m2">2</div>
+  <div class="mh-info">
+    <div class="mh-tag m2">Módulo 2 · PDF Corticosteroides (AIES)</div>
+    <h2>Corticosteroides</h2>
+    <p class="mh-desc">Mecanismo genómico · Potencias · Efectos adversos · Uso en odontología</p>
+  </div>
+</div>
+<div class="div-m m2"></div>
+
+<p class="prose">Los <strong>glucocorticoides (GC)</strong> son las drogas antiinflamatorias más potentes disponibles. Su potencia viene de actuar en el núcleo de la célula modificando directamente la expresión génica — no solo inhibiendo una enzima como los AINEs, sino controlando si los genes proinflamatorios se leen o no.</p>
+
+<div class="callout keyt">
+  <span class="co-ico">🔑</span>
+  <div class="co-body">
+    <div class="co-title">Por qué son más potentes que los AINEs</div>
+    <div class="co-text">Los GC inducen <strong>Lipocortina-1</strong>, que inhibe PLA₂ → bloquean la formación del ácido araquidónico antes de que llegue a COX o LOX. Resultado: inhiben <strong>prostaglandinas Y leucotrienos</strong> al mismo tiempo. Los AINEs solo bloquean COX → solo prostaglandinas.</div>
+  </div>
+</div>
+
+<h3 class="sh m2">El mecanismo genómico paso a paso</h3>
+
+<div class="dc">
+<div class="dc-hdr m2">⚙️ Cómo actúa un glucocorticoide en el núcleo</div>
+<svg viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif">
+  <rect width="780" height="200" fill="#fafaf8"/>
+  <defs>
+    <marker id="ta" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3aba8a"/></marker>
+    <marker id="tr" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#d95f5f"/></marker>
+  </defs>
+  <!-- Step 1 -->
+  <rect x="10" y="50" width="110" height="50" rx="8" fill="#e6f9f2" stroke="#3aba8a" stroke-width="1.5"/>
+  <text x="65" y="72" text-anchor="middle" fill="#1a6a4a" font-size="10" font-weight="700">GC libre</text>
+  <text x="65" y="88" text-anchor="middle" fill="#3a8a6a" font-size="9">(cortisol, dexa…)</text>
+  <!-- arrow -->
+  <path d="M120 75 L150 75" stroke="#3aba8a" stroke-width="2" marker-end="url(#ta)"/>
+  <!-- Step 2 -->
+  <rect x="150" y="50" width="130" height="50" rx="8" fill="#d4799a" stroke="#b05c7c" stroke-width="1.5"/>
+  <text x="215" y="72" text-anchor="middle" fill="white" font-size="10" font-weight="700">GR citosólico</text>
+  <text x="215" y="88" text-anchor="middle" fill="#fce0f0" font-size="9">(disocia HSP90)</text>
+  <!-- arrow -->
+  <path d="M280 75 L310 75" stroke="#3aba8a" stroke-width="2" marker-end="url(#ta)"/>
+  <!-- Step 3 -->
+  <rect x="310" y="50" width="140" height="50" rx="8" fill="#3aba8a" stroke="#1a8a5a" stroke-width="1.5"/>
+  <text x="380" y="72" text-anchor="middle" fill="white" font-size="10" font-weight="700">Complejo GC-GR</text>
+  <text x="380" y="88" text-anchor="middle" fill="#d0fff0" font-size="9">translocación nuclear</text>
+  <!-- fork -->
+  <path d="M380 100 L380 130" stroke="#3aba8a" stroke-width="2"/>
+  <path d="M380 130 L230 160 L230 170" stroke="#3aba8a" stroke-width="2" marker-end="url(#ta)"/>
+  <path d="M380 130 L560 160 L560 170" stroke="#d95f5f" stroke-width="2" marker-end="url(#tr)"/>
+  <!-- Trans-activacion -->
+  <rect x="130" y="170" width="200" height="22" rx="6" fill="#e6f9f2" stroke="#3aba8a" stroke-width="1.5"/>
+  <text x="230" y="185" text-anchor="middle" fill="#1a6a4a" font-size="10" font-weight="700">✅ Trans-activación → ↑ Lipocortina, IL-10</text>
+  <!-- Trans-represion -->
+  <rect x="460" y="170" width="200" height="22" rx="6" fill="#fff0f0" stroke="#d95f5f" stroke-width="1.5"/>
+  <text x="560" y="185" text-anchor="middle" fill="#c03060" font-size="10" font-weight="700">🚫 Trans-represión → ↓ COX-2, PLA₂, citocinas</text>
+  <!-- labels -->
+  <text x="65" y="38" text-anchor="middle" fill="#3a8a6a" font-size="9">① Difusión</text>
+  <text x="215" y="38" text-anchor="middle" fill="#8a3060" font-size="9">② Unión</text>
+  <text x="380" y="38" text-anchor="middle" fill="#1a6a4a" font-size="9">③ Activación</text>
+  <text x="230" y="148" fill="#3a8a6a" font-size="9">GRE (+)</text>
+  <text x="540" y="148" fill="#c03060" font-size="9">nGRE / NF-κB</text>
+</svg>
+</div>
+
+<div class="cmp">
+  <div class="cmp-col cmp-l">
+    <h4>Trans-activación (GRE+)</h4>
+    <ul>
+      <li>↑ Lipocortina-1 → inhibe PLA₂</li>
+      <li>↑ IL-10 (antiinflamatoria)</li>
+      <li>↑ GILZ (modulación inmune)</li>
+      <li>Inicio: 1–12 horas</li>
+    </ul>
+  </div>
+  <div class="cmp-col cmp-r">
+    <h4>Trans-represión (nGRE)</h4>
+    <ul>
+      <li>↓ COX-2 (menos prostaglandinas)</li>
+      <li>↓ PLA₂ (menos AA libre)</li>
+      <li>↓ iNOS (menos NO)</li>
+      <li>↓ Citocinas: TNF-α, IL-1, IL-6</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sh m2">Potencia antiinflamatoria relativa (cortisol = 1)</h3>
+
+<div class="dc">
+<div class="dc-hdr m2">📊 Orden de potencias — esencial para el parcial</div>
+<svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif">
+  <rect width="760" height="210" fill="#fafaf8"/>
+  <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e6f9f2"/><stop offset="100%" stop-color="#3aba8a"/></linearGradient>
+  <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fce8f0"/><stop offset="100%" stop-color="#d95f5f"/></linearGradient></defs>
+  <!-- bars, each represents potency relative to 30 max -->
+  <!-- Cortisol: 1/30 = 3.3% of 600px = 20px -->
+  <text x="155" y="38" text-anchor="end" fill="#4a4a5a" font-size="11">Cortisol</text>
+  <rect x="160" y="26" width="20" height="18" rx="3" fill="url(#g1)"/>
+  <text x="186" y="38" fill="#1a6a4a" font-size="11" font-weight="700">1×</text>
+  <!-- Prednisona/Prednisolona: 4/30 = 80px -->
+  <text x="155" y="64" text-anchor="end" fill="#4a4a5a" font-size="11">Prednisona / Prednisolona</text>
+  <rect x="160" y="52" width="80" height="18" rx="3" fill="url(#g1)"/>
+  <text x="246" y="64" fill="#1a6a4a" font-size="11" font-weight="700">4×</text>
+  <!-- Triamcinolona: 5/30 = 100px -->
+  <text x="155" y="90" text-anchor="end" fill="#4a4a5a" font-size="11">Triamcinolona</text>
+  <rect x="160" y="78" width="100" height="18" rx="3" fill="url(#g1)"/>
+  <text x="266" y="90" fill="#1a6a4a" font-size="11" font-weight="700">5×</text>
+  <!-- Metilprednisolona: 6/30 = 120px -->
+  <text x="155" y="116" text-anchor="end" fill="#4a4a5a" font-size="11">Metilprednisolona</text>
+  <rect x="160" y="104" width="120" height="18" rx="3" fill="url(#g1)"/>
+  <text x="286" y="116" fill="#1a6a4a" font-size="11" font-weight="700">6×</text>
+  <!-- Betametasona: 25/30 = 500px -->
+  <text x="155" y="142" text-anchor="end" fill="#4a4a5a" font-size="11">Betametasona</text>
+  <rect x="160" y="130" width="500" height="18" rx="3" fill="url(#g2)"/>
+  <text x="666" y="142" fill="#c03060" font-size="11" font-weight="700">25×</text>
+  <!-- Dexametasona: 30/30 = 600px max shown as 580 -->
+  <text x="155" y="168" text-anchor="end" fill="#4a4a5a" font-size="11" font-weight="700">Dexametasona ⭐</text>
+  <rect x="160" y="156" width="580" height="18" rx="3" fill="url(#g2)"/>
+  <text x="746" y="168" fill="#c03060" font-size="12" font-weight="800">30×</text>
+  <!-- axis -->
+  <line x1="160" y1="185" x2="750" y2="185" stroke="#ddd" stroke-width="1"/>
+  <text x="160" y="198" fill="#9a9aaa" font-size="9">0</text>
+  <text x="350" y="198" text-anchor="middle" fill="#9a9aaa" font-size="9">15</text>
+  <text x="747" y="198" fill="#c03060" font-size="9" font-weight="700">30</text>
+</svg>
+</div>
+
+<div class="fg">
+  <div class="fc-item"><div class="fi-ico">⏱️</div><div class="fi-title">Vida media corta</div><div class="fi-val">Cortisol, Prednisona, Prednisolona<br><span style="font-size:.8rem;color:var(--muted)">8–12 h</span></div></div>
+  <div class="fc-item"><div class="fi-ico">⏱️</div><div class="fi-title">Vida media intermedia</div><div class="fi-val">Triamcinolona, Metilprednisolona<br><span style="font-size:.8rem;color:var(--muted)">12–36 h</span></div></div>
+  <div class="fc-item"><div class="fi-ico">⏱️</div><div class="fi-title">Vida media larga</div><div class="fi-val">Dexametasona, Betametasona<br><span style="font-size:.8rem;color:var(--muted)">36–54 h</span></div></div>
+  <div class="fc-item"><div class="fi-ico">🧂</div><div class="fi-title">Mín. actividad mineralocorticoide</div><div class="fi-val">Dexametasona, Betametasona<br><span style="font-size:.8rem;color:var(--muted)">Ideal en inflamación aguda</span></div></div>
+</div>
+
+<div class="callout warn">
+  <span class="co-ico">⚠️</span>
+  <div class="co-body">
+    <div class="co-title">Supresión adrenal: la trampa del uso crónico</div>
+    <div class="co-text">Más de 2–3 semanas con dosis moderadas → retroalimentación negativa en hipotálamo/hipófisis → atrofia de la corteza suprarrenal. <strong>Nunca suspender bruscamente.</strong> La reducción debe ser gradual. La combinación GC + AINEs potencia el riesgo de úlcera gastrointestinal.</div>
+  </div>
+</div>
+
+<h3 class="sh m2">Efectos adversos clave (uso crónico)</h3>
+<table class="rtbl t2">
+  <tr><th>Sistema</th><th>Efecto</th><th>Mecanismo</th></tr>
+  <tr><td>Metabólico</td><td>Hiperglucemia, Cushing</td><td>↑ gluconeogénesis, redistribución grasa</td></tr>
+  <tr><td>Óseo</td><td>Osteoporosis</td><td>↓ absorción Ca²⁺, ↓ osteoblastos</td></tr>
+  <tr><td>GI</td><td>Úlcera péptica (esp. + AINEs)</td><td>↓ PGs protectoras mucosa</td></tr>
+  <tr><td>Inmune</td><td>Inmunosupresión</td><td>↓ citocinas, ↓ PMN</td></tr>
+  <tr><td>HTA</td><td>Hipertensión</td><td>Efecto mineralocorticoide residual</td></tr>
+  <tr><td>Ocular</td><td>Cataratas, glaucoma</td><td>Uso prolongado tópico/sistémico</td></tr>
+  <tr><td>Suprarrenal</td><td><strong>Crisis adrenal</strong></td><td>Suspensión brusca</td></tr>
+</table>
+</div>
+
+<!-- ══════════════ MÓDULO 3 ══════════════ -->
+<div class="sep">· · ·</div>
+<div id="mod3">
+<div class="mh">
+  <div class="mh-num m3">3</div>
+  <div class="mh-info">
+    <div class="mh-tag m3">Módulo 3 · PDFs Analgésicos + AINEs Grupos</div>
+    <h2>Analgésicos / AINEs</h2>
+    <p class="mh-desc">Cascada del AA · 3 efectos · Clasificación por selectividad · Grupos químicos · Efectos adversos</p>
+  </div>
+</div>
+<div class="div-m m3"></div>
+
+<p class="prose">Los <strong>AINEs (Antiinflamatorios No Esteroideos)</strong> son el grupo farmacológico más usado en odontología. Su mecanismo principal es la inhibición de la <strong>ciclooxigenasa (COX)</strong>, enzima que convierte el ácido araquidónico en prostaglandinas. Entender la cascada del ácido araquidónico es entender por qué actúan, cómo se diferencian entre sí y qué efectos adversos tienen.</p>
+
+<!-- CASCADA AA -->
+<div class="dc">
+<div class="dc-hdr m3">⚗️ La cascada del ácido araquidónico — el diagrama más importante del módulo</div>
+<svg viewBox="0 0 780 380" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif">
+  <rect width="780" height="380" fill="#fafaf8"/>
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a7ec8"/></marker>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3aba8a"/></marker>
+    <marker id="a3" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#d4799a"/></marker>
+    <marker id="a4" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e8943a"/></marker>
+    <marker id="a5" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9b72cf"/></marker>
+  </defs>
+  <!-- Lesión -->
+  <rect x="280" y="10" width="220" height="30" rx="8" fill="#d95f5f"/>
+  <text x="390" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="800">LESIÓN / ESTÍMULO</text>
+  <path d="M390 40 L390 58" stroke="#4a7ec8" stroke-width="2.5" marker-end="url(#a1)"/>
+  <!-- Fosfolipidos -->
+  <rect x="280" y="58" width="220" height="28" rx="8" fill="#eaf2fc" stroke="#4a7ec8" stroke-width="1.5"/>
+  <text x="390" y="77" text-anchor="middle" fill="#1a3c78" font-size="11" font-weight="700">Fosfolípidos de membrana</text>
+  <!-- GC block -->
+  <rect x="526" y="62" width="148" height="22" rx="6" fill="#e6f9f2" stroke="#3aba8a" stroke-width="1.5"/>
+  <text x="600" y="77" text-anchor="middle" fill="#1a6a4a" font-size="10" font-weight="700">GC ⊣ (via Lipocortina)</text>
+  <path d="M526 73 L502 73" stroke="#3aba8a" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#a2)"/>
+  <path d="M390 86 L390 104" stroke="#4a7ec8" stroke-width="2.5" marker-end="url(#a1)"/>
+  <!-- PLA2 -->
+  <rect x="280" y="104" width="220" height="28" rx="8" fill="#4a7ec8" stroke="#1a3c78" stroke-width="1.5"/>
+  <text x="390" y="123" text-anchor="middle" fill="white" font-size="12" font-weight="700">Fosfolipasa A₂ (PLA₂)</text>
+  <path d="M390 132 L390 150" stroke="#4a7ec8" stroke-width="2.5" marker-end="url(#a1)"/>
+  <!-- AA -->
+  <rect x="265" y="150" width="250" height="28" rx="8" fill="#fce8f0" stroke="#d4799a" stroke-width="2.5"/>
+  <text x="390" y="169" text-anchor="middle" fill="#8a3060" font-size="13" font-weight="800">Ácido Araquidónico (AA)</text>
+  <!-- 3 branches -->
+  <path d="M330 178 L190 212" stroke="#d4799a" stroke-width="2" marker-end="url(#a3)"/>
+  <path d="M390 178 L390 212" stroke="#e8943a" stroke-width="2" marker-end="url(#a4)"/>
+  <path d="M450 178 L590 212" stroke="#9b72cf" stroke-width="2" marker-end="url(#a5)"/>
+  <!-- COX -->
+  <rect x="70" y="212" width="240" height="26" rx="8" fill="#fce8f0" stroke="#d4799a" stroke-width="1.5"/>
+  <text x="190" y="229" text-anchor="middle" fill="#8a3060" font-size="11" font-weight="700">COX-1 / COX-2</text>
+  <path d="M190 238 L190 256" stroke="#d4799a" stroke-width="2" marker-end="url(#a3)"/>
+  <rect x="70" y="256" width="240" height="44" rx="8" fill="#fff0f5" stroke="#d4799a" stroke-width="1.5"/>
+  <text x="190" y="273" text-anchor="middle" fill="#8a3060" font-size="10" font-weight="700">Prostanoides</text>
+  <text x="190" y="289" text-anchor="middle" fill="#7a4060" font-size="9">PGE₂ · PGI₂ · PGF₂α · TXA₂ · PGD₂</text>
+  <rect x="70" y="308" width="240" height="24" rx="6" fill="#d4799a"/>
+  <text x="190" y="324" text-anchor="middle" fill="white" font-size="10" font-weight="700">⊣ AINEs inhiben COX</text>
+  <!-- LOX -->
+  <rect x="270" y="212" width="240" height="26" rx="8" fill="#fff4e6" stroke="#e8943a" stroke-width="1.5"/>
+  <text x="390" y="229" text-anchor="middle" fill="#8a4a10" font-size="11" font-weight="700">5-Lipooxigenasa (5-LOX)</text>
+  <path d="M390 238 L390 256" stroke="#e8943a" stroke-width="2" marker-end="url(#a4)"/>
+  <rect x="270" y="256" width="240" height="44" rx="8" fill="#fffaf0" stroke="#e8943a" stroke-width="1.5"/>
+  <text x="390" y="273" text-anchor="middle" fill="#8a4a10" font-size="10" font-weight="700">Leucotrienos</text>
+  <text x="390" y="289" text-anchor="middle" fill="#7a5010" font-size="9">LTB₄ · LTC₄ · LTD₄ · LTE₄</text>
+  <rect x="270" y="308" width="240" height="24" rx="6" fill="#e8943a"/>
+  <text x="390" y="324" text-anchor="middle" fill="white" font-size="10" font-weight="700">⊣ Montelukast (anti-LT)</text>
+  <!-- CYP450 -->
+  <rect x="470" y="212" width="240" height="26" rx="8" fill="#f3eaff" stroke="#9b72cf" stroke-width="1.5"/>
+  <text x="590" y="229" text-anchor="middle" fill="#5a1a9a" font-size="11" font-weight="700">CYP450</text>
+  <path d="M590 238 L590 256" stroke="#9b72cf" stroke-width="2" marker-end="url(#a5)"/>
+  <rect x="470" y="256" width="240" height="44" rx="8" fill="#faf0ff" stroke="#9b72cf" stroke-width="1.5"/>
+  <text x="590" y="273" text-anchor="middle" fill="#5a1a9a" font-size="10" font-weight="700">HETEs / EETs</text>
+  <text x="590" y="289" text-anchor="middle" fill="#5a1a9a" font-size="9">Funciones vasculares y renales</text>
+  <!-- summary line -->
+  <text x="390" y="352" text-anchor="middle" fill="#3aba8a" font-size="11" font-weight="700">GC bloquean PLA₂ → inhiben PGs + LTs</text>
+  <text x="390" y="368" text-anchor="middle" fill="#d4799a" font-size="10">AINEs solo COX → solo prostanoides · Montelukast solo LOX → solo leucotrienos</text>
+</svg>
+</div>
+
+<div class="callout keyb">
+  <span class="co-ico">💡</span>
+  <div class="co-body">
+    <div class="co-title">La diferencia que siempre preguntan</div>
+    <div class="co-text"><strong>GC:</strong> bloquean PLA₂ → sin ácido araquidónico → sin PGs ni LTs. <strong>AINEs:</strong> bloquean COX → solo sin PGs (los leucotrienos siguen produciéndose). Por eso en asma los AINEs pueden empeorar la broncoconstricción (desvío a LOX).</div>
+  </div>
+</div>
+
+<h3 class="sh m3">Los 3 efectos de los AINEs</h3>
+<div class="fg">
+  <div class="fc-item" style="border-left:3px solid var(--blue)">
+    <div class="fi-ico">💊</div>
+    <div class="fi-title">Analgésico</div>
+    <div class="fi-val" style="font-size:.88rem">Dolor leve-moderado. Dosis bajas. Inicio rápido. Sin alterar conciencia. Techo analgésico (inferior a opioides). Mecanismo: ↓ PGE₂ en nociceptores.</div>
+  </div>
+  <div class="fc-item" style="border-left:3px solid var(--orange)">
+    <div class="fi-ico">🌡️</div>
+    <div class="fi-title">Antipirético</div>
+    <div class="fi-val" style="font-size:.88rem">Solo baja fiebre, NO temperatura normal. ↓ PGE₂ hipotalámica. Vasodilatación + sudoración → enfriamiento.</div>
+  </div>
+  <div class="fc-item" style="border-left:3px solid var(--teal)">
+    <div class="fi-ico">🔥</div>
+    <div class="fi-title">Antiinflamatorio</div>
+    <div class="fi-val" style="font-size:.88rem">Requiere dosis más altas. Inicio más lento (días). Controla los 4 signos: dolor, rubor, calor, edema.</div>
+  </div>
+</div>
+
+<h3 class="sh m3">COX-1 vs COX-2 — la clave para entender la selectividad</h3>
+<table class="rtbl t3">
+  <tr><th>Característica</th><th>COX-1</th><th>COX-2</th></tr>
+  <tr><td>Expresión</td><td>Constitutiva (siempre presente)</td><td>Inducible (en inflamación)</td></tr>
+  <tr><td>Tejidos clave</td><td>Estómago (mucosa), riñón, plaquetas</td><td>Zonas inflamadas, endotelio vascular</td></tr>
+  <tr><td>Función fisiológica</td><td>Protección mucosa gástrica, TXA₂ plaquetario, flujo renal</td><td>Síntesis PGI₂ endotelial, respuesta inflamatoria</td></tr>
+  <tr><td>Inhibir → efecto adverso</td><td><span class="tag-warn">Úlcera, sangrado, ↓ flujo renal</span></td><td><span class="tag-warn">↑ Riesgo cardiovascular (coxibs)</span></td></tr>
+  <tr><td>Fármacos selectivos</td><td>AAS dosis bajas (irreversible)</td><td>Coxibs: celecoxib, etoricoxib</td></tr>
+</table>
+
+<div class="callout warn">
+  <span class="co-ico">🚨</span>
+  <div class="co-body">
+    <div class="co-title">El dilema coxib: menos estómago, más corazón</div>
+    <div class="co-text">Selectivos COX-2 → ↓ PGI₂ endotelial (antiagregante, vasodilatadora) sin ↓ TXA₂ plaquetario (proagregante) → <strong>desequilibrio trombogénico → ↑ IAM / ACV.</strong> Por esto se retiraron rofecoxib (Vioxx), valdecoxib, lumiracoxib. Solo quedan celecoxib y etoricoxib. CI en ICC y cardiopatía isquémica.</div>
+  </div>
+</div>
+
+<h3 class="sh m3">Grupos químicos — resumen de los más importantes</h3>
+<table class="rtbl t3">
+  <tr><th>Grupo</th><th>Fármacos destacados</th><th>Selectividad</th><th>VM</th><th>Lo que más importa</th></tr>
+  <tr><td><strong>Salicilatos</strong></td><td>AAS, Diflunisal</td><td>No selectivo</td><td>Corta</td><td><strong>AAS: irreversible.</strong> 75-100mg = antiagregante. CI &lt;20 años con virus (Síndrome de Reye)</td></tr>
+  <tr style="background:#fafff8"><td><strong>Propionatos</strong></td><td>Ibuprofeno ⭐, Naproxeno, Ketoprofeno</td><td>No selectivo</td><td>Corta-media</td><td><strong>Ibuprofeno: 1ª línea en odontología.</strong> Mejor riesgo/beneficio. Naproxeno: VM más larga (2 tomas/día)</td></tr>
+  <tr><td><strong>Acéticos</strong></td><td>Diclofenaco ⭐, Ketorolaco, Indometacina</td><td>Diclofenaco: pref. débil COX-2</td><td>Variable</td><td>Diclofenaco: 2ª línea odontología. <strong>Ketorolaco: alta potencia parenteral</strong> (máx 5 días)</td></tr>
+  <tr style="background:#fafff8"><td><strong>Oxicam</strong></td><td>Piroxicam, Meloxicam, Tenoxicam</td><td>Meloxicam: pref. débil COX-2</td><td>Larga (50-60h)</td><td>Una dosis diaria. Piroxicam: mayor gastrolesividad. Meloxicam: mejor perfil GI</td></tr>
+  <tr><td><strong>Para-aminofenol</strong></td><td>Paracetamol, Propacetamol</td><td>COX-3 central (débil)</td><td>Corta</td><td><strong>NO antiinflamatorio periférico.</strong> Hepatotóxico en sobredosis (NAPQI). No ácido.</td></tr>
+  <tr style="background:#fafff8"><td><strong>Pirazolonas</strong></td><td>Dipirona/Metamizol</td><td>No claro</td><td>—</td><td><span class="tag-warn">Riesgo agranulocitosis.</span> Retirada en muchos países.</td></tr>
+  <tr><td><strong>Coxibs</strong></td><td>Celecoxib, Etoricoxib</td><td>Selectivo COX-2</td><td>Larga</td><td>↓ GI, <span class="tag-warn">↑ CV.</span> CI en ICC, cardiopatía isquémica. Retirados: rofecoxib, valdecoxib</td></tr>
+  <tr style="background:#fafff8"><td><strong>Sulfonamidas</strong></td><td>Nimesulida</td><td>Pref. débil COX-2</td><td>Intermedia</td><td><span class="tag-warn">Descontinuada en Colombia 2022</span> por hepatotoxicidad</td></tr>
+</table>
+
+<h3 class="sh m3">Efectos adversos principales</h3>
+<div class="dc">
+<div class="dc-hdr m3">⚠️ Por sistema — más frecuentes y más graves</div>
+<svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif">
+  <rect width="760" height="220" fill="#fafaf8"/>
+  <!-- 5 blocks -->
+  <rect x="6" y="10" width="142" height="200" rx="10" fill="#fff0f0" stroke="#d95f5f" stroke-width="1.5"/>
+  <rect x="6" y="10" width="142" height="32" rx="10" fill="#d95f5f"/>
+  <rect x="6" y="32" width="142" height="10" fill="#d95f5f"/>
+  <text x="77" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="800">🫄 GI</text>
+  <text x="16" y="58" fill="#9a2020" font-size="9" font-weight="700">Gastrolesividad</text>
+  <text x="16" y="73" fill="#7a3030" font-size="9">Úlcera gastroduodenal</text>
+  <text x="16" y="88" fill="#7a3030" font-size="9">Hemorragia GI</text>
+  <text x="16" y="103" fill="#7a3030" font-size="9">Gastritis</text>
+  <text x="16" y="122" fill="#9a3050" font-size="9" font-weight="700">Mecanismo:</text>
+  <text x="16" y="137" fill="#7a3030" font-size="9">↓ PGE₂/PGI₂ → ↓ moco</text>
+  <text x="16" y="152" fill="#7a3030" font-size="9">+ daño directo mucosa</text>
+  <text x="16" y="172" fill="#3a7a3a" font-size="9">Coxibs: menor riesgo</text>
+  <text x="16" y="187" fill="#c03060" font-size="9">Piroxicam: mayor riesgo</text>
+  <!-- Renal -->
+  <rect x="156" y="10" width="142" height="200" rx="10" fill="#fff4e6" stroke="#e8943a" stroke-width="1.5"/>
+  <rect x="156" y="10" width="142" height="32" rx="10" fill="#e8943a"/>
+  <rect x="156" y="32" width="142" height="10" fill="#e8943a"/>
+  <text x="227" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="800">🫘 Renal</text>
+  <text x="166" y="58" fill="#8a4010" font-size="9" font-weight="700">Nefrotoxicidad</text>
+  <text x="166" y="73" fill="#7a4010" font-size="9">Retención líquidos</text>
+  <text x="166" y="88" fill="#7a4010" font-size="9">↓ Perfusión renal</text>
+  <text x="166" y="103" fill="#7a4010" font-size="9">Insuficiencia renal aguda</text>
+  <text x="166" y="122" fill="#9a4010" font-size="9" font-weight="700">Mecanismo:</text>
+  <text x="166" y="137" fill="#7a4010" font-size="9">↓ PGs renales →</text>
+  <text x="166" y="152" fill="#7a4010" font-size="9">↓ autorregulación renal</text>
+  <text x="166" y="172" fill="#c03060" font-size="9">CI: IR preexistente</text>
+  <!-- Bronquial -->
+  <rect x="306" y="10" width="142" height="200" rx="10" fill="#eaf2fc" stroke="#4a7ec8" stroke-width="1.5"/>
+  <rect x="306" y="10" width="142" height="32" rx="10" fill="#4a7ec8"/>
+  <rect x="306" y="32" width="142" height="10" fill="#4a7ec8"/>
+  <text x="377" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="800">🫁 Bronquial</text>
+  <text x="316" y="58" fill="#1a3c78" font-size="9" font-weight="700">Broncoespasmo</text>
+  <text x="316" y="73" fill="#1a3c78" font-size="9">Aumento leucotrienos</text>
+  <text x="316" y="88" fill="#1a3c78" font-size="9">(desvío de AA a LOX)</text>
+  <text x="316" y="103" fill="#1a3c78" font-size="9">Asma AINE-inducida</text>
+  <text x="316" y="122" fill="#1a3c78" font-size="9" font-weight="700">Riesgo:</text>
+  <text x="316" y="137" fill="#1a3c78" font-size="9">Asmáticos + AINEs no</text>
+  <text x="316" y="152" fill="#1a3c78" font-size="9">selectivos = peligroso</text>
+  <text x="316" y="172" fill="#c03060" font-size="9">CI: asma intrínseca</text>
+  <!-- CV -->
+  <rect x="456" y="10" width="142" height="200" rx="10" fill="#f3eaff" stroke="#9b72cf" stroke-width="1.5"/>
+  <rect x="456" y="10" width="142" height="32" rx="10" fill="#9b72cf"/>
+  <rect x="456" y="32" width="142" height="10" fill="#9b72cf"/>
+  <text x="527" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="800">❤️ Cardiovasc.</text>
+  <text x="466" y="58" fill="#5a1a9a" font-size="9" font-weight="700">Trombogénico</text>
+  <text x="466" y="73" fill="#5a1a9a" font-size="9">↓ PGI₂ endotelial</text>
+  <text x="466" y="88" fill="#5a1a9a" font-size="9">↑ TXA₂ relativo</text>
+  <text x="466" y="103" fill="#5a1a9a" font-size="9">↑ Presión arterial</text>
+  <text x="466" y="122" fill="#5a1a9a" font-size="9" font-weight="700">Máximo riesgo:</text>
+  <text x="466" y="137" fill="#5a1a9a" font-size="9">COXIBS (selectivos</text>
+  <text x="466" y="152" fill="#5a1a9a" font-size="9">COX-2)</text>
+  <text x="466" y="172" fill="#c03060" font-size="9">CI: ICC, card. isquémica</text>
+  <!-- Hematol -->
+  <rect x="606" y="10" width="148" height="200" rx="10" fill="#e6f9f2" stroke="#3aba8a" stroke-width="1.5"/>
+  <rect x="606" y="10" width="148" height="32" rx="10" fill="#3aba8a"/>
+  <rect x="606" y="32" width="148" height="10" fill="#3aba8a"/>
+  <text x="680" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="800">🩸 Hematológico</text>
+  <text x="616" y="58" fill="#1a6a4a" font-size="9" font-weight="700">Varios efectos</text>
+  <text x="616" y="73" fill="#1a6a4a" font-size="9">Agranulocitosis: Dipirona</text>
+  <text x="616" y="88" fill="#1a6a4a" font-size="9">Antiagregación: AAS</text>
+  <text x="616" y="103" fill="#1a6a4a" font-size="9">Hepatotox: Diclofenaco</text>
+  <text x="616" y="118" fill="#1a6a4a" font-size="9">Reye: AAS &lt;20 años</text>
+  <text x="616" y="137" fill="#c03060" font-size="9" font-weight="700">Nimesulida → hepatotox</text>
+  <text x="616" y="152" fill="#c03060" font-size="9">(retirada Colombia 2022)</text>
+</svg>
+</div>
+
+<h3 class="sh m3">Interacciones importantes — memorízalas</h3>
+<div class="fg">
+  <div class="fc-item" style="border-top:3px solid #d95f5f">
+    <div class="fi-ico">💉</div>
+    <div class="fi-title">+ Anticoagulantes</div>
+    <div class="fi-val" style="font-size:.87rem">↑ riesgo de sangrado grave (warfarina + diclofenaco = peligroso)</div>
+  </div>
+  <div class="fc-item" style="border-top:3px solid var(--teal)">
+    <div class="fi-ico">🧬</div>
+    <div class="fi-title">+ Corticosteroides</div>
+    <div class="fi-val" style="font-size:.87rem">↑ gastrolesividad (doble inhibición de protección mucosa)</div>
+  </div>
+  <div class="fc-item" style="border-top:3px solid var(--blue)">
+    <div class="fi-ico">💧</div>
+    <div class="fi-title">+ Diuréticos / IECA</div>
+    <div class="fi-val" style="font-size:.87rem">↓ efecto hipotensivo + ↑ riesgo nefrotoxicidad</div>
+  </div>
+  <div class="fc-item" style="border-top:3px solid var(--orange)">
+    <div class="fi-ico">⚗️</div>
+    <div class="fi-title">+ Litio</div>
+    <div class="fi-val" style="font-size:.87rem">AINEs ↑ niveles de litio → toxicidad por litio</div>
+  </div>
+</div>
+
+<div class="callout tip">
+  <span class="co-ico">💡</span>
+  <div class="co-body">
+    <div class="co-title">En odontología: ibuprofeno es el rey</div>
+    <div class="co-text">Ibuprofeno 400-600mg c/6-8h es el AINE de primera elección en odontología por su mejor relación riesgo-beneficio. Para dolor posoperatorio severo: ketorolaco (máx 5 días). Para antiagregación dental (uso de AAS): respetar el intervalo de 7-10 días antes de cirugía. Benzidamina en enjuague: útil en mucosa oral, sin absorción sistémica.</div>
+  </div>
+</div>
+
+</div><!-- /mod3 -->
+
+<!-- FOOTER -->
+<div class="sep">· · ·</div>
+<div style="background:var(--rose-l);border-radius:var(--r);padding:28px 24px;text-align:center;margin-top:8px">
+  <div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--rose-d);margin-bottom:8px">¿Quieres practicar lo que repasaste?</div>
+  <div style="color:var(--muted);font-size:.88rem;margin-bottom:12px">Abre FarmacoStudy_V2.html para flashcards, quizzes y simulacro completo</div>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <span style="background:var(--rose);color:#fff;border-radius:20px;padding:6px 16px;font-size:.82rem;font-weight:600">🃏 36 Flashcards</span>
+    <span style="background:var(--rose);color:#fff;border-radius:20px;padding:6px 16px;font-size:.82rem;font-weight:600">✅ 46 Quiz questions</span>
+    <span style="background:var(--rose);color:#fff;border-radius:20px;padding:6px 16px;font-size:.82rem;font-weight:600">📝 20 Simulacro final</span>
+  </div>
+</div>
+
+</div><!-- /book -->
+
+<script>
+// highlight active nav on scroll
+var secs=[{id:'mod1',el:document.querySelector('.snl:nth-child(1)')},{id:'mod2',el:document.querySelector('.snl:nth-child(2)')},{id:'mod3',el:document.querySelector('.snl:nth-child(3)')}];
+window.addEventListener('scroll',function(){
+  var top=window.scrollY+100;
+  secs.forEach(function(s,i){
+    var el=document.getElementById(s.id);
+    if(!el)return;
+    var next=secs[i+1]?document.getElementById(secs[i+1].id):null;
+    var inRange=el.offsetTop<=top&&(!next||next.offsetTop>top);
+    s.el.classList.toggle('active',inRange);
+    if(i===1)s.el.classList.toggle('active',inRange);
+    if(i===2)s.el.classList.toggle('active',inRange);
+  });
+},{passive:true});
+</script>
+</body>
+</html>

@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmacoStudy · Odontología</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdfafa;--card:#fff;--sidebar-bg:#fff7f9;--sidebar-w:240px;
+  --rose:#d4799a;--rose-light:#fce8f0;--rose-mid:#e8a4bb;--rose-dark:#b05c7c;
+  --text:#2d2d2d;--text-muted:#7a7a7a;--border:#f0e0e6;
+  --green:#5cb88a;--orange:#e8943a;--red:#d95f5f;--blue:#6fa8d4;
+  --shadow:0 2px 12px rgba(180,100,140,.10);
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:15px}
+
+/* SIDEBAR */
+#sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:var(--sidebar-bg);
+  border-right:1.5px solid var(--border);display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;z-index:100;overflow-y:auto;
+  transition:transform .3s;
+}
+.sidebar-logo{padding:22px 20px 10px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.sidebar-logo h2{font-size:17px;font-weight:700;color:var(--rose-dark);letter-spacing:-.3px}
+.sidebar-logo p{font-size:11px;color:var(--text-muted);margin-top:2px}
+.nav-section{padding:6px 12px 2px;font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:var(--radius-sm);margin:1px 8px;cursor:pointer;font-size:13.5px;color:var(--text);font-weight:400;transition:all .18s;border:none;background:none;width:calc(100% - 16px);text-align:left}
+.nav-item:hover{background:var(--rose-light);color:var(--rose-dark)}
+.nav-item.active{background:var(--rose-light);color:var(--rose-dark);font-weight:600}
+.nav-item .icon{font-size:15px;min-width:18px}
+.nav-progress{margin:10px 16px;padding:10px 12px;background:var(--rose-light);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.np-label{font-size:11px;color:var(--text-muted);margin-bottom:5px}
+.np-bar{height:6px;background:#f0d6e0;border-radius:99px;overflow:hidden}
+.np-fill{height:100%;background:var(--rose);border-radius:99px;transition:width .5s}
+.np-pct{font-size:12px;font-weight:600;color:var(--rose-dark);margin-top:4px}
+
+/* MAIN */
+#main{margin-left:var(--sidebar-w);flex:1;padding:32px 36px;max-width:calc(100% - var(--sidebar-w))}
+.section{display:none}
+.section.active{display:block}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.page-title{font-size:24px;font-weight:700;color:var(--text)}
+.page-subtitle{font-size:14px;color:var(--text-muted);margin-top:3px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-rose{background:var(--rose-light);color:var(--rose-dark)}
+.badge-green{background:#e8f7f0;color:#3a9c6a}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s}
+.card:hover{border-color:var(--rose-mid);transform:translateY(-2px);box-shadow:0 6px 20px rgba(180,100,140,.15)}
+.card-icon{font-size:28px;margin-bottom:10px}
+.card-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.card-desc{font-size:12.5px;color:var(--text-muted);line-height:1.5}
+.card-footer{margin-top:12px;display:flex;align-items:center;justify-content:space-between}
+.progress-mini{height:4px;background:#f0d6e0;border-radius:99px;overflow:hidden;flex:1;margin-right:8px}
+.progress-mini-fill{height:100%;background:var(--rose);border-radius:99px;transition:width .5s}
+.pct-mini{font-size:11px;font-weight:600;color:var(--rose-dark)}
+
+/* CONTENT SECTIONS */
+.content-block{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow)}
+.cb-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;user-select:none}
+.cb-header:hover{background:#fdf5f7}
+.cb-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cb-arrow{font-size:12px;color:var(--text-muted);transition:transform .2s}
+.cb-arrow.open{transform:rotate(180deg)}
+.cb-body{padding:0 20px 18px;display:none}
+.cb-body.open{display:block}
+.cb-body p{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:10px}
+.cb-body ul{margin-left:18px;margin-bottom:10px}
+.cb-body li{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:3px}
+.cb-body strong{color:var(--rose-dark)}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+.tbl th{background:var(--rose-light);color:var(--rose-dark);font-weight:600;padding:9px 12px;text-align:left;border-bottom:2px solid var(--border)}
+.tbl td{padding:8px 12px;border-bottom:1px solid #f5e8ed;vertical-align:top}
+.tbl tr:hover td{background:#fdf5f7}
+.tbl .highlight{background:#fff3f6}
+
+/* TAGS */
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11.5px;font-weight:500;margin:2px}
+.tag-rose{background:var(--rose-light);color:var(--rose-dark)}
+.tag-green{background:#e8f7f0;color:#3a9c6a}
+.tag-orange{background:#fff3e8;color:#c47620}
+.tag-red{background:#ffeaea;color:var(--red)}
+.tag-blue{background:#e8f2fb;color:#3a78b0}
+
+/* ALERT BOXES */
+.alert{border-radius:var(--radius-sm);padding:12px 16px;margin:10px 0;font-size:13.5px;line-height:1.6;border-left:4px solid}
+.alert-rose{background:var(--rose-light);border-color:var(--rose);color:var(--rose-dark)}
+.alert-green{background:#e8f7f0;border-color:var(--green);color:#2d7a52}
+.alert-orange{background:#fff3e8;border-color:var(--orange);color:#8c5a1a}
+.alert-red{background:#ffeaea;border-color:var(--red);color:#8c2020}
+.alert-blue{background:#e8f2fb;border-color:var(--blue);color:#2a5980}
+
+/* FLASHCARDS */
+.fc-container{display:flex;flex-direction:column;align-items:center;gap:20px;padding:10px 0}
+.fc-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.fc-filter{padding:7px 14px;border-radius:99px;border:1.5px solid var(--border);background:var(--card);font-size:13px;cursor:pointer;transition:all .2s;color:var(--text)}
+.fc-filter.active,.fc-filter:hover{background:var(--rose-light);border-color:var(--rose);color:var(--rose-dark)}
+.fc-counter{font-size:13px;color:var(--text-muted)}
+.fc-wrap{perspective:1000px;width:100%;max-width:560px;height:240px;cursor:pointer}
+.fc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius);border:1.5px solid var(--border);padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:var(--shadow)}
+.fc-front{background:var(--card)}
+.fc-back{background:var(--rose-light);transform:rotateY(180deg)}
+.fc-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:10px}
+.fc-front .fc-label{color:var(--rose)}
+.fc-question{font-size:17px;font-weight:600;line-height:1.5;color:var(--text)}
+.fc-answer{font-size:15px;line-height:1.6;color:var(--rose-dark);font-weight:500}
+.fc-hint{font-size:12px;color:var(--text-muted);margin-top:8px}
+.fc-nav{display:flex;gap:12px;align-items:center}
+.btn{padding:9px 20px;border-radius:99px;border:none;cursor:pointer;font-size:13.5px;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--rose);color:#fff}
+.btn-primary:hover{background:var(--rose-dark)}
+.btn-outline{background:var(--card);color:var(--rose-dark);border:1.5px solid var(--border)}
+.btn-outline:hover{background:var(--rose-light);border-color:var(--rose)}
+.btn-sm{padding:6px 14px;font-size:12.5px}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#4a9e75}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* QUIZ */
+.quiz-wrap{max-width:680px}
+.quiz-progress-bar{height:5px;background:#f0d6e0;border-radius:99px;margin-bottom:24px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--rose);border-radius:99px;transition:width .4s}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.quiz-num{font-size:12px;color:var(--text-muted);font-weight:500}
+.quiz-score{font-size:12px;font-weight:600;color:var(--rose-dark)}
+.quiz-question{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:20px;color:var(--text)}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.quiz-opt{padding:13px 18px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:14px;transition:all .18s;text-align:left;display:flex;align-items:flex-start;gap:10px}
+.quiz-opt:hover:not(.locked){border-color:var(--rose-mid);background:var(--rose-light)}
+.quiz-opt.correct{border-color:var(--green);background:#e8f7f0;color:#2d7a52}
+.quiz-opt.wrong{border-color:var(--red);background:#ffeaea;color:var(--red)}
+.quiz-opt.locked{cursor:default}
+.opt-letter{min-width:22px;height:22px;border-radius:50%;background:var(--rose-light);color:var(--rose-dark);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.quiz-opt.correct .opt-letter{background:var(--green);color:#fff}
+.quiz-opt.wrong .opt-letter{background:var(--red);color:#fff}
+.explanation{border-radius:var(--radius-sm);padding:14px 16px;margin-top:4px;font-size:13.5px;line-height:1.65;display:none}
+.explanation.show{display:block}
+.explanation.correct{background:#e8f7f0;color:#2d6b45;border-left:4px solid var(--green)}
+.explanation.wrong{background:#ffeaea;color:#7a2020;border-left:4px solid var(--red)}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.quiz-result{text-align:center;padding:30px 20px}
+.result-score{font-size:56px;font-weight:700;color:var(--rose-dark);margin:16px 0 4px}
+.result-label{font-size:17px;color:var(--text-muted)}
+.result-details{background:var(--rose-light);border-radius:var(--radius);padding:20px;margin:20px auto;max-width:400px;text-align:left}
+.rd-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px}
+.rd-row:last-child{border-bottom:none}
+
+/* EXAM / PUNTOS CLAVE */
+.pk-list{display:flex;flex-direction:column;gap:10px}
+.pk-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow)}
+.pk-num{min-width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.pk-text{font-size:14px;line-height:1.6;flex:1}
+.pk-text strong{color:var(--rose-dark)}
+.pk-source{font-size:11px;color:var(--text-muted);margin-top:4px}
+
+/* PROGRESS PAGE */
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.prog-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.prog-card-title{font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.prog-big{font-size:36px;font-weight:700;color:var(--rose-dark)}
+.prog-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+.prog-bar-wrap{margin-top:8px}
+.prog-bar-bg{height:7px;background:#f0d6e0;border-radius:99px;overflow:hidden}
+.prog-bar-fg{height:100%;background:var(--rose);border-radius:99px;transition:width .6s}
+
+/* MOBILE */
+#hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--rose);border:none;border-radius:var(--radius-sm);width:40px;height:40px;cursor:pointer;font-size:18px;color:#fff;align-items:center;justify-content:center}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99}
+@media(max-width:768px){
+  #hamburger{display:flex}
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  #overlay.show{display:block}
+  #main{margin-left:0;padding:20px 16px;padding-top:64px}
+}
+.divider{height:1.5px;background:var(--border);margin:20px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.section-label{font-size:13px;font-weight:700;color:var(--rose-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.section-label::after{content:'';flex:1;height:1.5px;background:var(--border)}
+.scroll-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:16px;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(180,100,140,.3);z-index:50}
+.scroll-top.show{display:flex}
+</style>
+</head>
+<body>
+
+<button id="hamburger" onclick="toggleSidebar()">☰</button>
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <h2>🌸 FarmacoStudy</h2>
+    <p>Farmacología · Odontología 2026</p>
+  </div>
+  <div class="nav-progress">
+    <div class="np-label">Progreso total</div>
+    <div class="np-bar"><div class="np-fill" id="sidebarProgress" style="width:0%"></div></div>
+    <div class="np-pct" id="sidebarPct">0%</div>
+  </div>
+  <div class="nav-section">Inicio</div>
+  <button class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">🏠</span>Dashboard</button>
+  <div class="nav-section">Módulos</div>
+  <button class="nav-item" onclick="showSection('mod1',this)"><span class="icon">💊</span>Antihistamínicos</button>
+  <button class="nav-item" onclick="showSection('mod2',this)"><span class="icon">🧬</span>Corticosteroides</button>
+  <button class="nav-item" onclick="showSection('mod3',this)"><span class="icon">🔬</span>Analgésicos · Intro</button>
+  <button class="nav-item" onclick="showSection('mod4',this)"><span class="icon">💡</span>AINEs · Grupos</button>
+  <div class="nav-section">Estudio</div>
+  <button class="nav-item" onclick="showSection('flashcards',this)"><span class="icon">🃏</span>Flashcards</button>
+  <button class="nav-item" onclick="showSection('quizzes',this)"><span class="icon">✅</span>Quizzes</button>
+  <div class="nav-section">Examen</div>
+  <button class="nav-item" onclick="showSection('puntos',this)"><span class="icon">⭐</span>Sí o Sí</button>
+  <button class="nav-item" onclick="showSection('simulacro',this)"><span class="icon">📋</span>Simulacro Final</button>
+  <button class="nav-item" onclick="showSection('progreso',this)"><span class="icon">📊</span>Mi Progreso</button>
+</nav>
+
+<main id="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="section active">
+  <div class="topbar">
+    <div>
+      <div class="page-title">¡Hola! Lista para estudiar 🌸</div>
+      <div class="page-subtitle">Farmacología odontológica · Parcial 2026</div>
+    </div>
+    <span class="badge badge-rose" id="dashPct">0% completado</span>
+  </div>
+  <div class="cards-grid">
+    <div class="card" onclick="showSection('mod1',document.querySelectorAll('.nav-item')[3])">
+      <div class="card-icon">💊</div>
+      <div class="card-title">Antihistamínicos</div>
+      <div class="card-desc">Histamina, receptores H1-H4, generaciones, efectos, odontología</div>
+      <div class="card-footer">
+        <div class="progress-mini"><div class="progress-mini-fill" id="p1" style="width:0%"></div></div>
+        <span class="pct-mini" id="pct1">0%</span>
+      </div>
+    </div>
+    <div class="card" onclick="showSection('mod2',document.querySelectorAll('.nav-item')[4])">
+      <div class="card-icon">🧬</div>
+      <div class="card-title">Corticosteroides</div>
+      <div class="card-desc">Glucocorticoides, potencia, mecanismo genómico, efectos secundarios</div>
+      <div class="card-footer">
+        <div class="progress-mini"><div class="progress-mini-fill" id="p2" style="width:0%"></div></div>
+        <span class="pct-mini" id="pct2">0%</span>
+      </div>
+    </div>
+    <div class="card" onclick="showSection('mod3',document.querySelectorAll('.nav-item')[5])">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">Analgésicos · Intro</div>
+      <div class="card-desc">Cascada araquidónica, prostaglandinas, tromboxanos, leucotrienos</div>
+      <div class="card-footer">
+        <div class="progress-mini"><div class="progress-mini-fill" id="p3" style="width:0%"></div></div>
+        <span class="pct-mini" id="pct3">0%</span>
+      </div>
+    </div>
+    <div class="card" onclick="showSection('mod4',document.querySelectorAll('.nav-item')[6])">
+      <div class="card-icon">💡</div>
+      <div class="card-title">AINEs · Grupos</div>
+      <div class="card-desc">Grupos químicos, COX selectividad, efectos adversos, interacciones</div>
+      <div class="card-footer">
+        <div class="progress-mini"><div class="progress-mini-fill" id="p4" style="width:0%"></div></div>
+        <span class="pct-mini" id="pct4">0%</span>
+      </div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card" onclick="showSection('puntos',document.querySelectorAll('.nav-item')[9])">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">Sí o Sí entran al parcial</div>
+      <div class="card-desc">Conceptos de alta probabilidad · Trampas clásicas · Lo que siempre preguntan</div>
+    </div>
+    <div class="card" onclick="showSection('simulacro',document.querySelectorAll('.nav-item')[10])">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Simulacro Final</div>
+      <div class="card-desc">20 preguntas mezcladas · Análisis de fortalezas y debilidades</div>
+    </div>
+  </div>
+  <div class="alert alert-rose" style="margin-top:16px">
+    <strong>💡 Consejo de estudio:</strong> Empieza por los módulos en orden, haz las flashcards de cada uno y luego el quiz antes de pasar al siguiente. Al final, haz el simulacro.
+  </div>
+</section>
+
+<!-- MÓDULO 1: ANTIHISTAMÍNICOS -->
+<section id="mod1" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">💊 Antihistamínicos</div>
+      <div class="page-subtitle">PDF: ANTIHISTAMINICOS 2026 · Tema 3 – Sistema Nervioso Periférico</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="showSection('flashcards',document.querySelectorAll('.nav-item')[7]);setFCFilter('antihistaminicos')">🃏 Flashcards</button>
+      <button class="btn btn-primary btn-sm" onclick="startQuiz('q1')">✅ Quiz</button>
+    </div>
+  </div>
+
+  <div class="section-label">La Histamina</div>
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🔴 ¿Qué es la histamina y dónde se produce?</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p>La histamina es una <strong>sustancia endógena</strong> que actúa como mediadora de funciones fisiológicas y patológicas.</p>
+      <ul>
+        <li><strong>Función fisiológica:</strong> Se sintetiza y libera permanentemente en células específicas del organismo.</li>
+        <li><strong>Función patológica:</strong> Se sintetiza y libera mediante una reacción antígeno–anticuerpo o proceso inflamatorio (lesión o estímulo). Principalmente en <strong>mastocitos y basófilos</strong>.</li>
+      </ul>
+      <div class="alert alert-orange">⚠️ En odontología, los materiales dentales pueden desencadenar reacciones antígeno–anticuerpo que liberan histamina.</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🎯 Receptores de la Histamina (H1 · H2 · H3 · H4)</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p>La histamina actúa como <strong>agonista sobre receptores de tipo metabotrópico</strong> (acoplados a proteína G).</p>
+      <table class="tbl">
+        <tr><th>Receptor</th><th>Mecanismo</th><th>Localización</th><th>Efectos clave</th></tr>
+        <tr><td><strong>H1</strong></td><td>Estimula liberación Ca²⁺</td><td>Músculo liso (vascular, GI, bronquiolar), SNC, SNP (piel, mucosas)</td><td>Broncoconstricción, vasodilatación, prurito, eritema, dolor, náuseas</td></tr>
+        <tr><td><strong>H2</strong></td><td>Activa adenilciclasa</td><td>Cardiovascular, célula parietal gástrica</td><td>Aumenta secreción ácida gástrica, aumenta actividad cardíaca</td></tr>
+        <tr><td><strong>H3</strong></td><td>Inhibe adenilciclasa</td><td>SNC (autorreceptores)</td><td>Regula liberación de histamina y otros neurotransmisores</td></tr>
+        <tr><td><strong>H4</strong></td><td>Inhibe adenilciclasa</td><td>Eosinófilos y neutrófilos</td><td>Quimiotaxis de eosinófilos y otras células</td></tr>
+      </table>
+      <div class="alert alert-rose">🔑 <strong>Regla práctica:</strong> H1 = alergias y broncoconstricción | H2 = ácido gástrico | H3 = regulador central | H4 = quimiotaxis</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🛡️ Mecanismos de bloqueo de la histamina</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <p>Existen tres estrategias farmacológicas para disminuir la acción de la histamina:</p>
+      <ul>
+        <li><strong>Inhibición fisiológica:</strong> Adrenalina → antagoniza funciones de la histamina de manera no competitiva.</li>
+        <li><strong>Inhibición de la liberación:</strong> Ketotifeno y cromoglicato sódico → estabilizan la membrana de mastocitos y basófilos. Efecto antihistamínico más marcado.</li>
+        <li><strong>Bloqueo de receptores:</strong> Antagonistas H1 (antihistamínicos), antagonistas H2 (inhibidores de secreción ácida: cimetidina, ranitidina, famotidina), antagonistas H3.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">Clasificación de Antihistamínicos</div>
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">📋 Tres generaciones + Tópicos</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <table class="tbl">
+        <tr><th>Generación</th><th>Fármacos</th><th>Características clave</th></tr>
+        <tr class="highlight"><td><strong>1ª (sedantes)</strong></td><td>Difenhidramina, Clorfeniramina, Dexclorfeniramina, Prometazina, Dimenhidrinato, Hidroxicina, Ketotifeno, Meclizina, Cinarizina, Ciproheptadina, Clemastina</td><td>Liposolubles, atraviesan BHE, sedación, efectos anticolinérgicos, efecto GI</td></tr>
+        <tr><td><strong>2ª (no sedantes)</strong></td><td>Loratadina, Cetirizina, Bilastina, Ebastina</td><td>Poco liposolubles, no cruzan BHE, sin sedación, sin anticolinérgicos</td></tr>
+        <tr><td><strong>3ª (no sedantes)</strong></td><td>Fexofenadina, Desloratadina, Levocetirizina</td><td>Metabolitos activos de 2ª gen., mayor selectividad, mínimos efectos adversos</td></tr>
+        <tr><td><strong>Tópicos</strong></td><td>Azelastina, Olopatadina, Alcaftadina, Bepotastina, Emedastina, Epinastina, Levocabastina</td><td>Uso local ocular/nasal</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚖️ Diferencias clave 1ª vs 2ª/3ª generación</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <div class="two-col">
+        <div>
+          <div class="alert alert-orange"><strong>1ª Generación (sedantes)</strong><ul style="margin-left:14px;margin-top:6px"><li>Más liposolubles</li><li>Mayor distribución a tejidos</li><li>Más inespecíficos</li><li>Atraviesan barrera hematoencefálica</li><li>Más depresores del SNC → sedación</li><li>Más efectos anticolinérgicos</li><li>Mayor efecto gastrointestinal</li></ul></div>
+        </div>
+        <div>
+          <div class="alert alert-green"><strong>2ª y 3ª Generación (no sedantes)</strong><ul style="margin-left:14px;margin-top:6px"><li>Poco liposolubles</li><li>Menor distribución a tejidos</li><li>Menos efectos en SNC</li><li>NO generan sedación</li><li>NO tienen efectos anticolinérgicos</li><li>NO poseen efectos sobre tracto GI</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Aplicaciones Terapéuticas</div>
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🦷 Usos en Odontología</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p><strong>Todas las generaciones:</strong> Profilaxis y tratamiento de reacciones alérgicas (agudas y crónicas), reacciones de hipersensibilidad a fármacos y materiales dentales, antipruriginosos.</p>
+      <p><strong>Primera generación — Usos específicos en odontología:</strong></p>
+      <ul>
+        <li><strong>Sedación y premedicación anestésica</strong> en consulta ambulatoria</li>
+        <li><strong>Alternativa como anestésico local</strong> en pacientes alérgicos a amidas y ésteres (principalmente Difenhidramina)</li>
+        <li>Manejo local de lesiones en mucosa bucal</li>
+        <li>Manejo de tos, prurito, vértigo, cinetosis</li>
+      </ul>
+      <div class="alert alert-rose">🔑 <strong>Dato clave de examen:</strong> La <strong>Difenhidramina</strong> (1ª gen.) puede usarse como anestésico local alternativo en alérgicos a amidas/ésteres.</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚠️ Efectos secundarios y Contraindicaciones</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <ul>
+        <li>Sedación, somnolencia, falta de concentración (principalmente 1ª gen.)</li>
+        <li>Hipotensión, cefalea, tinnitus, visión borrosa</li>
+        <li><strong>Efectos anticolinérgicos:</strong> xerostomía, estreñimiento, retención urinaria</li>
+        <li>En niños: estimulación y excitación paradójica</li>
+        <li>2ª generación: palpitaciones y arritmias transitorias</li>
+        <li>Falla hepática, trombocitopenia (raros)</li>
+        <li><strong>Sobredosis:</strong> midriasis, mareo, alucinaciones, convulsiones</li>
+      </ul>
+      <div class="alert alert-red">🚨 <strong>Alta incidencia en cavidad bucal:</strong> Caries, xerostomía, enfermedad periodontal (por efecto anticolinérgico crónico).</div>
+      <p style="margin-top:10px"><strong>Interacciones importantes:</strong> Depresores del SNC, medicamentos hepatotóxicos, hipotensores.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 2: CORTICOSTEROIDES -->
+<section id="mod2" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">🧬 Corticosteroides (AIES)</div>
+      <div class="page-subtitle">PDF: GENERALIDADES CORTICOSTEROIDES 2026 · Tema 3 continuación</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="showSection('flashcards',document.querySelectorAll('.nav-item')[7]);setFCFilter('corticosteroides')">🃏 Flashcards</button>
+      <button class="btn btn-primary btn-sm" onclick="startQuiz('q2')">✅ Quiz</button>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🏭 ¿Qué son los corticosteroides?</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p>Grupo de hormonas producidas por la <strong>glándula suprarrenal</strong> que participan en diferentes funciones regulando procesos fisiológicos.</p>
+      <table class="tbl">
+        <tr><th>Tipo</th><th>Capa</th><th>Hormona principal</th><th>Función</th></tr>
+        <tr><td><strong>Glucocorticoides</strong></td><td>Fasciculata y Reticular</td><td>Cortisol</td><td>Metabolismo intermediario, catabolismo, regulan respuestas inmunitarias e inflamación</td></tr>
+        <tr><td><strong>Mineralocorticoides</strong></td><td>Glomerular</td><td>Aldosterona</td><td>Regulan resorción de sodio y potasio</td></tr>
+        <tr><td><strong>Androgénicos</strong></td><td>Fasciculata y Reticular</td><td>Testosterona</td><td>Características sexuales</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">📊 Clasificación y Potencias</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p><strong>Por duración de acción:</strong></p>
+      <table class="tbl">
+        <tr><th>Duración</th><th>Fármacos</th></tr>
+        <tr><td><span class="tag tag-green">Corta (&lt;12h)</span></td><td>Hidrocortisona</td></tr>
+        <tr><td><span class="tag tag-orange">Intermedia (12–36h)</span></td><td>Prednisona, Prednisolona, Metilprednisolona, Triamcinolona</td></tr>
+        <tr><td><span class="tag tag-red">Larga (36–72h)</span></td><td><strong>Betametasona, Dexametasona</strong>, Deflazacort</td></tr>
+      </table>
+      <p style="margin-top:14px"><strong>Potencia antiinflamatoria vs mineralocorticoide:</strong></p>
+      <table class="tbl">
+        <tr><th>Fármaco</th><th>Antiinflamatoria</th><th>Mineralocorticoide</th></tr>
+        <tr><td>Hidrocortisona (referencia)</td><td>1</td><td>2</td></tr>
+        <tr><td>Deflazacort</td><td>3.5</td><td>1</td></tr>
+        <tr><td>Prednisolona</td><td>4</td><td>1</td></tr>
+        <tr><td>Metilprednisolona</td><td>5</td><td>0.5</td></tr>
+        <tr><td>Triamcinolona</td><td>5</td><td>0</td></tr>
+        <tr><td>Betametasona</td><td>25</td><td>0</td></tr>
+        <tr class="highlight"><td><strong>Dexametasona</strong></td><td><strong>30</strong></td><td>0</td></tr>
+        <tr><td>Aldosterona</td><td>0</td><td>200–400</td></tr>
+      </table>
+      <div class="alert alert-rose">🔑 <strong>Dexametasona = mayor potencia antiinflamatoria (30x)</strong> con efecto mineralocorticoide = 0. Por eso es el más usado en cirugías dentales.</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚙️ Mecanismo de Acción: Genómico y No Genómico</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p><strong>Mecanismo Genómico (lento):</strong></p>
+      <ol style="margin-left:18px;margin-bottom:12px">
+        <li style="font-size:14px;line-height:1.7">El glucocorticoide atraviesa la membrana celular y se fija a receptores intracelulares (Receptor Citoplasmático del Glucocorticoide – RCG)</li>
+        <li style="font-size:14px;line-height:1.7">El complejo GC-RCG atraviesa la membrana del núcleo (<strong>transnucleación</strong>)</li>
+        <li style="font-size:14px;line-height:1.7">Se une a sitios específicos del DNA (Elementos de Respuesta al Glucocorticoide – ERG)</li>
+        <li style="font-size:14px;line-height:1.7">Altera la expresión genética de enzimas y proteínas</li>
+      </ol>
+      <div class="two-col">
+        <div class="alert alert-green"><strong>Trans-activación (GREs +)</strong><br>Regulación positiva de genes → aumenta expresión de moduladores antiinflamatorios. <em>Asociado a la mayoría de los efectos secundarios.</em></div>
+        <div class="alert alert-rose"><strong>Trans-represión (GREs –)</strong><br>Regulación negativa de genes → inhibe factores de transcripción para disminuir mediadores inflamatorios. <em>Asociado a los efectos principales.</em></div>
+      </div>
+      <div class="alert alert-orange">⏱️ <strong>Latencia:</strong> Entre 5 minutos y 1 hora (o más) para evidenciar respuesta. El efecto NO es inmediato.</div>
+      <p style="margin-top:12px"><strong>Mecanismo No Genómico (rápido):</strong> Explica una respuesta más inmediata. 3 mecanismos propuestos: interacciones no específicas con la membrana celular, efectos no genómicos mediados por el receptor citosólico, e interacciones específicas con un receptor de membrana.</p>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🎯 Efectos Antiinflamatorios e Inmunoreguladores</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <ul>
+        <li>Inhibe producción de citoquinas inflamatorias: <strong>IL-1, IL-2, Fosfolipasa A2 y COX-2</strong></li>
+        <li>Aumenta producción de moléculas antiinflamatorias: <strong>IL-10 y lipocortina 1</strong></li>
+        <li>Inhibe migración de leucocitos al foco inflamatorio</li>
+        <li><strong>Disminuye eosinófilos circulantes y aumenta neutrófilos</strong></li>
+        <li>Inhibe degradación de mastocitos, producción de citoquinas y liberación de histamina</li>
+        <li>Disminución de linfocitos T y B</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Otros efectos importantes:</strong></p>
+      <ul>
+        <li>Potencia aminas simpaticomiméticas</li>
+        <li>Suprime inmunoglobulinas séricas (G, A y M) → predisposición a infecciones</li>
+        <li>Estimulación hepática de síntesis de glucosa → <strong>genera hiperglicemia</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚠️ Efectos Secundarios</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <div class="two-col">
+        <div>
+          <p><strong>Metabólicos:</strong> Hiperglicemia, hiperinsulinemia, catabolismo proteico, alcalosis hipocalémica</p>
+          <p><strong>Piel:</strong> Atrofia subcutánea, alteración de cicatrización</p>
+          <p><strong>Grasa corporal:</strong> Obesidad central, facie de luna, joroba</p>
+          <p><strong>Óseo:</strong> Osteoporosis, retardo en el crecimiento</p>
+          <p><strong>GI:</strong> Predisposición a úlcera gastroduodenal, gastritis, sangrado</p>
+        </div>
+        <div>
+          <p><strong>Cardiovascular:</strong> Retención de líquidos, edema, hipertensión, insuficiencia cardíaca</p>
+          <p><strong>Sexual (hombres):</strong> Disminuye testosterona</p>
+          <p><strong>Sexual (mujeres):</strong> Suprime LH/GnRH, anovulación, amenorrea</p>
+          <p><strong>SNC:</strong> Euforia, adinamia, ansiedad, insomnio</p>
+          <p><strong>Inmunológico:</strong> Disminuye inmunidad celular y humoral</p>
+        </div>
+      </div>
+      <div class="alert alert-red">🚨 <strong>Efectos secundarios de riesgo:</strong> Terapia &gt;10 días → <strong>Insuficiencia corticosuprarrenal</strong> | Terapia &gt;1 mes → <strong>Síndrome de Cushing</strong></div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🦷 Aplicaciones en Odontología</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <table class="tbl">
+        <tr><th>Indicación</th><th>Contexto clínico</th></tr>
+        <tr><td><strong>Antiinflamatorio</strong></td><td>Cirugías de 3os molares, cirugía ortognática, traumas físicos, inflamación infecciosa que comprometa vías aéreas</td></tr>
+        <tr><td><strong>Inmunosupresor</strong></td><td>Enfermedades autoinmunes: <strong>aftas, pénfigo</strong></td></tr>
+        <tr><td><strong>Antialérgico</strong></td><td>Reacciones alérgicas agudas o crónicas</td></tr>
+      </table>
+      <div class="alert alert-rose">💊 <strong>Consideraciones antes de iniciar:</strong> Evaluar riesgo–beneficio · Dosis mínima necesaria · Administrar preferiblemente en la mañana · Evitar en embarazo, lactancia y niños · Analizar interacciones (hepatotóxicos, inductores enzimáticos)</div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 3 -->
+<section id="mod3" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">🔬 Analgésicos – Introducción</div>
+      <div class="page-subtitle">PDF: INTRODUCCIÓN ANALGESICOS DE ACCIÓN PERIFÉRICA 2026</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="showSection('flashcards',document.querySelectorAll('.nav-item')[7]);setFCFilter('analgesicos')">🃏 Flashcards</button>
+      <button class="btn btn-primary btn-sm" onclick="startQuiz('q3')">✅ Quiz</button>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🔗 Cascada del Ácido Araquidónico</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <p>Ante una lesión tisular, los <strong>fosfolípidos de membrana</strong> son degradados por la <strong>Fosfolipasa A2</strong> liberando Ácido Araquidónico (AA), que sigue tres vías:</p>
+      <table class="tbl">
+        <tr><th>Vía</th><th>Enzima</th><th>Productos</th><th>Fármaco que la bloquea</th></tr>
+        <tr><td><strong>Ciclooxigenasa</strong></td><td>COX-1 / COX-2</td><td>PGs, Prostaciclina (PGI₂), Tromboxano (TXA₂)</td><td>AINEs, Analgésicos</td></tr>
+        <tr><td><strong>Lipooxigenasa</strong></td><td>5-LOX, 12-LOX</td><td>Leucotrienos (LTB₄, LTC₄, LTD₄), Lipoxinas</td><td>Antileucotrienos (montelukast)</td></tr>
+        <tr><td><strong>CYP450</strong></td><td>Epooxigenasa</td><td>HETEs, EETs</td><td>—</td></tr>
+      </table>
+      <div class="alert alert-rose">🔑 <strong>Los glucocorticoides inhiben la Fosfolipasa A2 → bloquean TODA la cascada (PGs + leucotrienos)</strong>. Los AINEs solo bloquean COX → solo afectan la vía de prostaglandinas.</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">📋 Prostaglandinas: Funciones fisiopatológicas</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <table class="tbl">
+        <tr><th>Sustancia</th><th>Receptor</th><th>Efectos más relevantes</th></tr>
+        <tr><td><strong>PGE₂</strong></td><td>EP1–EP4</td><td>Potente mediador periférico de <strong>dolor, inflamación, edema y rubor</strong>. A nivel central → fiebre, hiperalgesia, fatiga. Modula PA y fertilidad.</td></tr>
+        <tr><td><strong>PGI₂ (prostaciclina)</strong></td><td>IP</td><td>Vasodilatación, antiagregante plaquetario, protección mucosa gástrica. <strong>Contrapeso fisiológico del TXA₂</strong></td></tr>
+        <tr><td><strong>PGF₂α</strong></td><td>FP(α,β)</td><td>Broncoconstricción, vasoconstricción, contracción músculo liso uterino (inicio del parto). Análogos FP: glaucoma</td></tr>
+        <tr><td><strong>PGD₂</strong></td><td>DP1, DP2</td><td>Vasodilatación, broncoconstricción en asma, participa en reacciones alérgicas (vía DP2/CRTH2)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🩸 Tromboxanos y Leucotrienos</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <table class="tbl">
+        <tr><th>Sustancia</th><th>Efectos clave</th></tr>
+        <tr><td><strong>TXA₂</strong></td><td>Potente agregación/adhesión plaquetaria. Potente vasoconstricción. Contrarrestado por PGI₂. Pacientes con AAS bloquean su síntesis irreversiblemente.</td></tr>
+        <tr><td><strong>LTB₄</strong></td><td>Quimioatracción de neutrófilos y macrófagos → inflamación aguda. NO broncoconstrictor directo.</td></tr>
+        <tr><td><strong>Cisteinil-LT (LTC₄, LTD₄, LTE₄)</strong></td><td><strong>Broncoconstricción 10–1000× más potente que histamina</strong>. Hipersecreción de moco. Asma y anafilaxia. Diana: montelukast, zafirlukast.</td></tr>
+      </table>
+      <div class="alert alert-red">⚠️ Los broncoespasmos por AINEs no selectivos se deben al desvío del AA hacia la vía de leucotrienos → más LTs broncoconstrictores.</div>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚙️ Características generales de Analgésicos y AINEs</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <p><strong>Farmacocinética común:</strong></p>
+      <ul>
+        <li>Vías: oral, parenteral, rectal, tópica, sublingual</li>
+        <li><strong>Ácidos débiles</strong> (excepto paracetamol y pirazolonas) → buena absorción oral en medio ácido gástrico</li>
+        <li><strong>Alta unión a proteínas plasmáticas (&gt;90%)</strong> → importante para efecto tisular e interacciones</li>
+        <li>Metabolismo hepático variable</li>
+        <li>Excreción renal como fármaco inactivo (&lt;1%) → pero son nefrotóxicos por su mecanismo de acción</li>
+      </ul>
+      <p><strong>Mecanismo principal:</strong> Inhibición de la síntesis de prostaglandinas mediante el <strong>bloqueo reversible competitivo de la enzima Ciclooxigenasa (COX)</strong>.</p>
+      <p><strong>Tres efectos principales (eficacia y potencia variables):</strong></p>
+      <ul>
+        <li><strong>Analgésico:</strong> Dolores leve a moderados. A dosis bajas. No altera estado de conciencia.</li>
+        <li><strong>Antipirético:</strong> Disminuye temperatura elevada (no afecta temperatura normal). Inhibe PGE₂ hipotalámica.</li>
+        <li><strong>Antiinflamatorio:</strong> Requiere <strong>dosis más altas</strong>. Inicio más lento (días).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 4 -->
+<section id="mod4" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">💡 AINEs – Grupos Químicos</div>
+      <div class="page-subtitle">PDF: parte 2 ANALGESICOS DE ACCIÓN PERIFÉRICA 2026</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="showSection('flashcards',document.querySelectorAll('.nav-item')[7]);setFCFilter('aines')">🃏 Flashcards</button>
+      <button class="btn btn-primary btn-sm" onclick="startQuiz('q4')">✅ Quiz</button>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🗂️ Clasificación completa por grupo químico</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <table class="tbl">
+        <tr><th>Grupo</th><th>Fármacos</th><th>Selectividad COX</th><th>Vida media</th><th>Nota clave</th></tr>
+        <tr><td><strong>Para-aminofenol</strong></td><td>Paracetamol, Propacetamol</td><td>Débil selectivo COX-2 central</td><td>Corta</td><td>NO antiinflamatorio periférico. Hepatotóxico en sobredosis.</td></tr>
+        <tr><td><strong>Pirazolonas</strong></td><td>Dipirona/Metamizol, Fenilbutazona</td><td>No selectivo</td><td>6–8h</td><td>Dipirona: riesgo de <strong>agranulocitosis</strong>. Retirada en muchos países.</td></tr>
+        <tr><td><strong>Ácido Salicílico</strong></td><td>AAS, Acetilsalicilato de lisina, Diflunisal</td><td>No selectivo, <strong>IRREVERSIBLE</strong> (AAS)</td><td>Corta (acetilados)</td><td>AAS dosis bajas (75–100mg): antiagregante. Dosis altas: antiinflamatorio.</td></tr>
+        <tr class="highlight"><td><strong>Ácido Propiónico</strong></td><td>Ibuprofeno, Naproxeno, Ketoprofeno, Dexibuprofeno, Dexketoprofeno</td><td>No selectivo</td><td>Corta–Intermedia</td><td><strong>Los más usados en odontología.</strong> Ibuprofeno: mejor riesgo/beneficio.</td></tr>
+        <tr><td><strong>Ácido Acético</strong></td><td>Diclofenaco, Aceclofenaco, Ketorolaco, Indometacina</td><td>Preferencial débil COX-2</td><td>Variable</td><td>Ketorolaco: alta potencia analgésica parenteral. Diclofenaco: amplio uso odontológico.</td></tr>
+        <tr><td><strong>Ácido Antranílico</strong></td><td>Ácido mefenámico, Ácido tolfenámico, Etofenamato</td><td>No selectivo</td><td>Variable</td><td>Etofenamato: tópico musculoesquelético.</td></tr>
+        <tr><td><strong>Enólicos (Oxicam)</strong></td><td>Meloxicam, Piroxicam, Tenoxicam, Lornoxicam</td><td>Meloxicam: preferencial COX-2; resto: no selectivo</td><td><strong>Larga (12–24h)</strong></td><td>Una toma diaria. Piroxicam: alta gastrolesividad.</td></tr>
+        <tr><td><strong>Sulfonamidas</strong></td><td>Nimesulida</td><td>Débil selectivo COX-2</td><td>Intermedia</td><td><strong>Descontinuada en Colombia desde 2022</strong> por hepatotoxicidad.</td></tr>
+        <tr><td><strong>Coxibs</strong></td><td>Celecoxib, Etoricoxib (en uso); Rofecoxib, Valdecoxib, Parecoxib (retirados)</td><td><strong>Selectivos COX-2</strong></td><td>Larga</td><td>↓ gastropatía pero ↑ <strong>riesgo cardiovascular</strong>. CI en ICC y cardiopatía isquémica.</td></tr>
+        <tr><td><strong>Otros</strong></td><td>Benzidamina</td><td>No selectivo / tópico</td><td>—</td><td>Uso tópico bucal.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚙️ Mecanismo de Acción Detallado</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <p><strong>Mecanismo principal:</strong> Inhibición de COX → ↓ síntesis de prostanoides (PGs, PGI₂, TXA₂)</p>
+      <ul>
+        <li><strong>AAS:</strong> actúa IRREVERSIBLEMENTE por acetilación de Ser530</li>
+        <li><strong>Coxibs:</strong> se unen al bolsillo lateral Val523 (exclusivo COX-2)</li>
+        <li>Resto: bloqueo reversible competitivo</li>
+      </ul>
+      <p><strong>Mecanismos complementarios:</strong></p>
+      <ul>
+        <li>Agonismo de receptores GPCR acoplados a proteína G inhibidora de adenilciclasa</li>
+        <li>Sobre PMN: inhibición quimiotaxis, ↓ radicales superóxido, activación apoptosis, estabilización lisosomas</li>
+        <li>Modulación central: vías serotoninérgicas, L-arginina/NO, sistema canabinoide</li>
+        <li>Expresión génica: ↓ COX-2 inducible, ↓ NO sintasa, ↓ TNF-α e IL-1</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">⚠️ Efectos Adversos</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body open">
+      <div class="two-col">
+        <div>
+          <div class="alert alert-red"><strong>🔴 Gastrolesividad</strong><br>Directa e indirecta. Úlcera gastroduodenal, hemorragias digestivas, gastritis. <strong>Más grave con NO selectivos (inhiben COX-1 citoprotector).</strong></div>
+          <div class="alert alert-orange" style="margin-top:8px"><strong>🟠 Nefrotoxicidad</strong><br>Retención de líquidos, nefropatía aguda y crónica. Mayor índice: <strong>Diclofenaco, Piroxicam.</strong></div>
+        </div>
+        <div>
+          <div class="alert alert-blue"><strong>🔵 Broncoespasmo</strong><br>Aumento de leucotrienos broncoconstrictores. Más fuerte con NO selectivos.</div>
+          <div class="alert alert-rose" style="margin-top:8px"><strong>🩷 Cardiovascular</strong><br>Efectos trombogénicos por ↑ TXA₂. Terapias largas. <strong>Más asociado a SELECTIVOS COX-2.</strong></div>
+        </div>
+      </div>
+      <p style="margin-top:14px"><strong>Otros efectos adversos:</strong></p>
+      <table class="tbl">
+        <tr><th>Efecto</th><th>Asociado a</th></tr>
+        <tr><td>Agranulocitosis, anemia aplástica</td><td>Pirazolonas (dipirona)</td></tr>
+        <tr><td>Inhibición agregación plaquetaria</td><td>AAS dosis bajas (irreversible)</td></tr>
+        <tr><td>Hepatotoxicidad</td><td>Diclofenaco, indolacéticos, dipirona, nimesulida</td></tr>
+        <tr><td><strong>Síndrome de Reye</strong></td><td>Salicilatos en <strong>menores de 20 años</strong></td></tr>
+        <tr><td>Reacciones alérgicas cruzadas</td><td>Relacionadas con mecanismo de acción (COX)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-block">
+    <div class="cb-header" onclick="toggleCB(this)">
+      <div class="cb-title">🚨 Factores de Riesgo e Interacciones</div>
+      <div class="cb-arrow">▼</div>
+    </div>
+    <div class="cb-body">
+      <div class="two-col">
+        <div>
+          <p><strong>Factores de riesgo para efectos adversos:</strong></p>
+          <ul>
+            <li>Ancianos</li>
+            <li>Antecedentes de úlcera gastroduodenal</li>
+            <li>Dosis elevadas o asociación de varios AINEs</li>
+            <li>Consumo de alcohol o cigarrillo</li>
+            <li>Asma / broncoespasmo</li>
+            <li>Hipertensión, insuficiencia cardíaca congestiva</li>
+            <li>Patología renal o daño hepático</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Interacciones farmacológicas importantes:</strong></p>
+          <ul>
+            <li><strong>Anticoagulantes</strong> (orales/parenterales) → ↑ riesgo de sangrado</li>
+            <li>Hipoglicemiantes orales</li>
+            <li>Corticosteroides</li>
+            <li>Diuréticos</li>
+            <li>Litio</li>
+            <li>Alcohol → ↑ sangrado gástrico</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLASHCARDS -->
+<section id="flashcards" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">🃏 Flashcards</div>
+      <div class="page-subtitle">Haz clic en la tarjeta para voltearla</div>
+    </div>
+  </div>
+  <div class="fc-container">
+    <div class="fc-controls">
+      <button class="fc-filter active" onclick="setFCFilter('all')">Todas</button>
+      <button class="fc-filter" onclick="setFCFilter('antihistaminicos')">💊 Antihistamínicos</button>
+      <button class="fc-filter" onclick="setFCFilter('corticosteroides')">🧬 Corticosteroides</button>
+      <button class="fc-filter" onclick="setFCFilter('analgesicos')">🔬 Analgésicos</button>
+      <button class="fc-filter" onclick="setFCFilter('aines')">💡 AINEs</button>
+    </div>
+    <div class="fc-counter" id="fcCounter">Tarjeta 1 de 36</div>
+    <div class="fc-wrap" onclick="flipCard()">
+      <div class="fc-inner" id="fcInner">
+        <div class="fc-front">
+          <div class="fc-label">Pregunta</div>
+          <div class="fc-question" id="fcQ">Cargando...</div>
+          <div class="fc-hint">👆 Clic para ver respuesta</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label">Respuesta</div>
+          <div class="fc-answer" id="fcA">...</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-outline" onclick="fcPrev()">← Anterior</button>
+      <button class="btn btn-outline btn-sm" onclick="markFCDifficult()" id="fcDiffBtn">🔴 Difícil</button>
+      <button class="btn btn-primary" onclick="fcNext()">Siguiente →</button>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-outline btn-sm" onclick="fcShuffle()">🔀 Mezclar</button>
+      <button class="btn btn-outline btn-sm" onclick="fcOnlyDifficult()" id="fcDiffFilter">⚡ Solo difíciles</button>
+    </div>
+    <div class="alert alert-rose" style="max-width:560px;text-align:center;font-size:13px" id="fcDiffCount"></div>
+  </div>
+</section>
+
+<!-- QUIZZES -->
+<section id="quizzes" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">✅ Quizzes por Módulo</div>
+      <div class="page-subtitle">Elige un módulo para practicar</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" onclick="startQuiz('q1')">
+      <div class="card-icon">💊</div>
+      <div class="card-title">Quiz: Antihistamínicos</div>
+      <div class="card-desc">12 preguntas · Receptores, generaciones, efectos, odontología</div>
+      <div class="card-footer"><span class="badge badge-rose" id="score_q1">No completado</span></div>
+    </div>
+    <div class="card" onclick="startQuiz('q2')">
+      <div class="card-icon">🧬</div>
+      <div class="card-title">Quiz: Corticosteroides</div>
+      <div class="card-desc">12 preguntas · Potencias, mecanismo, efectos secundarios</div>
+      <div class="card-footer"><span class="badge badge-rose" id="score_q2">No completado</span></div>
+    </div>
+    <div class="card" onclick="startQuiz('q3')">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">Quiz: Analgésicos Intro</div>
+      <div class="card-desc">10 preguntas · Cascada AA, prostaglandinas, leucotrienos</div>
+      <div class="card-footer"><span class="badge badge-rose" id="score_q3">No completado</span></div>
+    </div>
+    <div class="card" onclick="startQuiz('q4')">
+      <div class="card-icon">💡</div>
+      <div class="card-title">Quiz: AINEs Grupos</div>
+      <div class="card-desc">12 preguntas · Grupos químicos, efectos adversos, COX selectividad</div>
+      <div class="card-footer"><span class="badge badge-rose" id="score_q4">No completado</span></div>
+    </div>
+  </div>
+  <div id="quizContainer" style="display:none">
+    <div class="quiz-wrap">
+      <button class="btn btn-outline btn-sm" onclick="closeQuiz()" style="margin-bottom:16px">← Volver a quizzes</button>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgBar" style="width:0%"></div></div>
+      <div class="quiz-header">
+        <span class="quiz-num" id="quizNum">Pregunta 1 de 12</span>
+        <span class="quiz-score" id="quizScoreDisplay">✅ 0</span>
+      </div>
+      <div class="quiz-question" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="explanation" id="quizExpl"></div>
+      <div class="quiz-actions" id="quizActions"></div>
+    </div>
+    <div id="quizResultDiv" style="display:none" class="quiz-result">
+      <div style="font-size:40px">🎉</div>
+      <div class="result-score" id="rScore">0/12</div>
+      <div class="result-label" id="rLabel">Buen intento</div>
+      <div class="result-details" id="rDetails"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-primary" onclick="retryQuiz()">🔄 Reintentar</button>
+        <button class="btn btn-outline" onclick="closeQuiz()">← Volver</button>
+        <button class="btn btn-outline" onclick="showSection('simulacro',document.querySelectorAll('.nav-item')[10])">📋 Simulacro Final</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUNTOS CLAVE -->
+<section id="puntos" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">⭐ Sí o Sí entran al parcial</div>
+      <div class="page-subtitle">Conceptos de alta probabilidad · Trampas clásicas · Confusiones frecuentes</div>
+    </div>
+  </div>
+  <div class="alert alert-rose" style="margin-bottom:20px">💡 Si estudias estos conceptos, tienes alta probabilidad de pasar el parcial. Son los puntos que MÁS se preguntan en farmacología odontológica.</div>
+  <div class="section-label">💊 Antihistamínicos</div>
+  <div class="pk-list">
+    <div class="pk-item"><div class="pk-num">1</div><div class="pk-text"><strong>La difenhidramina (1ª gen.) se puede usar como anestésico local alternativo</strong> en pacientes alérgicos a amidas y ésteres. Esta es la pregunta clásica de antihistamínicos en odontología.<div class="pk-source">📄 ANTIHISTAMINICOS 2026 · p.18</div></div></div>
+    <div class="pk-item"><div class="pk-num">2</div><div class="pk-text"><strong>Diferencia fundamental 1ª vs 2ª/3ª generación:</strong> La 1ª GEN atraviesa la BHE y produce sedación (liposolubles). La 2ª/3ª NO son sedantes, NO tienen efecto anticolinérgico.<div class="pk-source">📄 ANTIHISTAMINICOS 2026 · p.17</div></div></div>
+    <div class="pk-item"><div class="pk-num">3</div><div class="pk-text"><strong>Los antihistamínicos causan xerostomía</strong> por su efecto anticolinérgico (1ª gen.), lo que predispone a caries y enfermedad periodontal. Dato importante para odontología.<div class="pk-source">📄 ANTIHISTAMINICOS 2026 · p.20</div></div></div>
+    <div class="pk-item"><div class="pk-num">4</div><div class="pk-text"><strong>H1 = broncoconstricción, H2 = ácido gástrico.</strong> Los antihistamínicos H1 NO bloquean la secreción ácida; para eso se necesitan antagonistas H2 (ranitidina, famotidina).<div class="pk-source">📄 ANTIHISTAMINICOS 2026 · p.9-10</div></div></div>
+    <div class="pk-item"><div class="pk-num">5</div><div class="pk-text"><strong>La adrenalina bloquea a la histamina de forma NO competitiva</strong> (inhibición fisiológica). Es la primera línea en anafilaxia. Los antihistamínicos son competitivos reversibles.<div class="pk-source">📄 ANTIHISTAMINICOS 2026 · p.12</div></div></div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">🧬 Corticosteroides</div>
+  <div class="pk-list">
+    <div class="pk-item"><div class="pk-num">6</div><div class="pk-text"><strong>Dexametasona = potencia antiinflamatoria 30x</strong> con efecto mineralocorticoide = 0. Es el glucocorticoide más usado en cirugías de terceros molares por esto.<div class="pk-source">📄 CORTICOSTEROIDES 2026 · p.11</div></div></div>
+    <div class="pk-item"><div class="pk-num">7</div><div class="pk-text"><strong>Los glucocorticoides inhiben Fosfolipasa A2 → bloquean TODA la cascada del ácido araquidónico</strong> (PGs + leucotrienos). Los AINEs solo bloquean COX.<div class="pk-source">📄 CORTICOSTEROIDES 2026 / INTRODUCCIÓN ANALGESICOS · p.13</div></div></div>
+    <div class="pk-item"><div class="pk-num">8</div><div class="pk-text"><strong>Terapia &gt;10 días → insuficiencia corticosuprarrenal. Terapia &gt;1 mes → Síndrome de Cushing.</strong> Diferencia crítica de tiempos.<div class="pk-source">📄 CORTICOSTEROIDES 2026 · p.27</div></div></div>
+    <div class="pk-item"><div class="pk-num">9</div><div class="pk-text"><strong>Trans-represión (GREs negativos) = efectos principales antiinflamatorios. Trans-activación (GREs positivos) = efectos secundarios.</strong> Trampa: parecen inversos a lo esperado.<div class="pk-source">📄 CORTICOSTEROIDES 2026 · p.19</div></div></div>
+    <div class="pk-item"><div class="pk-num">10</div><div class="pk-text"><strong>Los glucocorticoides DISMINUYEN eosinófilos y AUMENTAN neutrófilos.</strong> También inhiben migración de leucocitos al foco inflamatorio.<div class="pk-source">📄 CORTICOSTEROIDES 2026 · p.23</div></div></div>
+    <div class="pk-item"><div class="pk-num">11</div><div class="pk-text"><strong>Prednisona es un PROFÁRMACO</strong> que se convierte en prednisolona (metabolito activo) en el hígado. No confundir con fármaco activo.<div class="pk-source">📄 CORTICOSTEROIDES 2026 · p.10</div></div></div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">🔬 Analgésicos / AINEs</div>
+  <div class="pk-list">
+    <div class="pk-item"><div class="pk-num">12</div><div class="pk-text"><strong>El AAS actúa de forma IRREVERSIBLE</strong> por acetilación de Ser530. Todos los demás AINEs son reversibles. Por eso el AAS como antiagregante se da 1 vez/día dosis baja.<div class="pk-source">📄 parte 2 ANALGESICOS · p.7</div></div></div>
+    <div class="pk-item"><div class="pk-num">13</div><div class="pk-text"><strong>Paracetamol NO es antiinflamatorio periférico.</strong> Es inhibidor central débil de COX-2. No confundir: tiene efecto analgésico y antipirético pero no controla inflamación periférica.<div class="pk-source">📄 parte 2 ANALGESICOS · p.12</div></div></div>
+    <div class="pk-item"><div class="pk-num">14</div><div class="pk-text"><strong>Los coxibs (selectivos COX-2) tienen mayor riesgo cardiovascular</strong> porque inhiben PGI₂ (vasodilatador/antiagregante) sin inhibir TXA₂ (vasoconstrictor/proagregante) → desbalance trombogénico.<div class="pk-source">📄 parte 2 ANALGESICOS · p.18</div></div></div>
+    <div class="pk-item"><div class="pk-num">15</div><div class="pk-text"><strong>Nimesulida descontinuada en Colombia desde 2022</strong> por hepatotoxicidad. Dato importante para no prescribirla y no confundirla con coxibs.<div class="pk-source">📄 parte 2 ANALGESICOS · p.18</div></div></div>
+    <div class="pk-item"><div class="pk-num">16</div><div class="pk-text"><strong>Síndrome de Reye: Salicilatos en menores de 20 años.</strong> Contraindicados. Trampa clásica: confundir con solo niños pequeños, pero es hasta los 20 años.<div class="pk-source">📄 parte 2 ANALGESICOS · p.22</div></div></div>
+    <div class="pk-item"><div class="pk-num">17</div><div class="pk-text"><strong>El efecto antiinflamatorio de los AINEs requiere dosis MÁS ALTAS</strong> que el efecto analgésico. No se logra con dosis bajas. Inicio más lento (días).<div class="pk-source">📄 INTRODUCCIÓN ANALGESICOS · p.25</div></div></div>
+    <div class="pk-item"><div class="pk-num">18</div><div class="pk-text"><strong>Cisteinil-leucotrienos (LTC₄, LTD₄): broncoconstricción 10–1000x más potente que histamina.</strong> Por eso el asma no responde bien a antihistamínicos solos.<div class="pk-source">📄 INTRODUCCIÓN ANALGESICOS · p.10</div></div></div>
+    <div class="pk-item"><div class="pk-num">19</div><div class="pk-text"><strong>Ácido propiónico (ibuprofeno, naproxeno) = más usados en odontología.</strong> Ibuprofeno tiene mejor perfil riesgo/beneficio. Naproxeno: mayor vida media (2 tomas/día).<div class="pk-source">📄 parte 2 ANALGESICOS · p.15</div></div></div>
+    <div class="pk-item"><div class="pk-num">20</div><div class="pk-text"><strong>Los AINEs son nefrotóxicos a pesar de excretarse &lt;1% como fármaco activo</strong> porque su mecanismo de acción inhibe las PGs renales que mantienen la perfusión renal.<div class="pk-source">📄 INTRODUCCIÓN ANALGESICOS · p.21</div></div></div>
+  </div>
+</section>
+
+<!-- SIMULACRO -->
+<section id="simulacro" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📋 Simulacro Final</div>
+      <div class="page-subtitle">20 preguntas · Todo el contenido mezclado · Con análisis de rendimiento</div>
+    </div>
+  </div>
+  <div id="simStart">
+    <div class="alert alert-blue" style="margin-bottom:20px">📝 Este simulacro mezcla preguntas de los 4 módulos. Al finalizar verás tu porcentaje, fortalezas y debilidades por tema.</div>
+    <div class="two-col" style="margin-bottom:20px">
+      <div class="prog-card">
+        <div class="prog-card-title">📊 Mejor puntaje</div>
+        <div class="prog-big" id="simBestScore">—</div>
+        <div class="prog-sub">histórico</div>
+      </div>
+      <div class="prog-card">
+        <div class="prog-card-title">🔄 Intentos</div>
+        <div class="prog-big" id="simAttempts">0</div>
+        <div class="prog-sub">simulacros realizados</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startSimulacro()" style="font-size:16px;padding:14px 32px">🚀 Iniciar Simulacro</button>
+  </div>
+  <div id="simQuizWrap" style="display:none">
+    <div class="quiz-wrap">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="simProgBar" style="width:0%"></div></div>
+      <div class="quiz-header">
+        <span class="quiz-num" id="simNum">Pregunta 1 de 20</span>
+        <span class="quiz-score" id="simScoreDisp">✅ 0</span>
+      </div>
+      <div id="simModTag" style="margin-bottom:8px"></div>
+      <div class="quiz-question" id="simQ"></div>
+      <div class="quiz-opts" id="simOpts"></div>
+      <div class="explanation" id="simExpl"></div>
+      <div class="quiz-actions" id="simActions"></div>
+    </div>
+  </div>
+  <div id="simResult" style="display:none">
+    <div class="quiz-result">
+      <div style="font-size:48px" id="simEmoji">🏆</div>
+      <div class="result-score" id="simFinalScore">0/20</div>
+      <div class="result-label" id="simFinalLabel">Resultado</div>
+      <div class="result-details" id="simAnalysis"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <button class="btn btn-primary" onclick="startSimulacro()">🔄 Nuevo simulacro</button>
+        <button class="btn btn-outline" onclick="document.getElementById('simResult').style.display='none';document.getElementById('simStart').style.display='block'">← Volver</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESO -->
+<section id="progreso" class="section">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📊 Mi Progreso</div>
+      <div class="page-subtitle">Seguimiento de estudio y rendimiento</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="resetProgress()" style="color:var(--red);border-color:var(--red)">🗑️ Reiniciar</button>
+  </div>
+  <div class="progress-grid">
+    <div class="prog-card">
+      <div class="prog-card-title">🏆 Progreso total</div>
+      <div class="prog-big" id="progTotal">0%</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-bg"><div class="prog-bar-fg" id="progTotalBar" style="width:0%"></div></div></div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-title">✅ Quizzes completados</div>
+      <div class="prog-big" id="progQuizzes">0/4</div>
+      <div class="prog-sub">módulos evaluados</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-title">🃏 Flashcards vistas</div>
+      <div class="prog-big" id="progFC">0</div>
+      <div class="prog-sub">de 36 tarjetas</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-title">📋 Simulacros</div>
+      <div class="prog-big" id="progSim">0</div>
+      <div class="prog-sub">realizados</div>
+    </div>
+  </div>
+  <div class="section-label">Rendimiento por módulo</div>
+  <div id="moduleScoreList"></div>
+  <div class="section-label" style="margin-top:20px">Historial de quizzes</div>
+  <div id="quizHistory" style="font-size:14px;color:var(--text-muted)">Aún no has completado ningún quiz.</div>
+</section>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== DATA =====
+
+const flashcards = [
+  // ANTIHISTAMÍNICOS
+  {id:'fc1',mod:'antihistaminicos',q:'¿Sobre qué tipo de receptores actúa la histamina?',a:'Receptores metabotrópicos (acoplados a proteína G): H1, H2, H3 y H4'},
+  {id:'fc2',mod:'antihistaminicos',q:'¿Qué receptor de histamina media la broncoconstricción?',a:'H1 (músculo liso bronquiolar). También media vasodilatación, prurito, eritema y dolor.'},
+  {id:'fc3',mod:'antihistaminicos',q:'¿Qué receptor aumenta la secreción ácida gástrica?',a:'H2 — Activa adenilciclasa en la célula parietal de la mucosa gástrica'},
+  {id:'fc4',mod:'antihistaminicos',q:'¿Cuál es la diferencia fundamental entre antihistamínicos de 1ª vs 2ª/3ª generación?',a:'1ª GEN: Liposolubles, atraviesan BHE, producen SEDACIÓN y tienen efectos anticolinérgicos.\n2ª/3ª GEN: No sedantes, no anticolinérgicos, no cruzan BHE.'},
+  {id:'fc5',mod:'antihistaminicos',q:'¿Qué antihistamínico se puede usar como anestésico local alternativo?',a:'Difenhidramina (1ª generación) — alternativa en pacientes alérgicos a amidas y ésteres'},
+  {id:'fc6',mod:'antihistaminicos',q:'¿Cuáles son los antihistamínicos de 2ª generación?',a:'Bilastina, Cetirizina, Loratadina, Ebastina'},
+  {id:'fc7',mod:'antihistaminicos',q:'¿Cuáles son los antihistamínicos de 3ª generación?',a:'Fexofenadina, Desloratadina, Levocetirizina (metabolitos activos de la 2ª gen.)'},
+  {id:'fc8',mod:'antihistaminicos',q:'¿Cómo actúan el ketotifeno y el cromoglicato sódico?',a:'Inhiben la LIBERACIÓN de histamina estabilizando la membrana de mastocitos y basófilos'},
+  {id:'fc9',mod:'antihistaminicos',q:'¿Cuáles son los efectos anticolinérgicos de los antihistamínicos en cavidad oral?',a:'Xerostomía → predispone a caries, enfermedad periodontal. También: estreñimiento, retención urinaria.'},
+  {id:'fc10',mod:'antihistaminicos',q:'¿Cuáles son los inhibidores de receptores H2 usados para secreción ácida?',a:'Cimetidina, Ranitidina, Famotidina, Nizatidina'},
+
+  // CORTICOSTEROIDES
+  {id:'fc11',mod:'corticosteroides',q:'¿Cuál glucocorticoide tiene la mayor potencia antiinflamatoria?',a:'Dexametasona: potencia 30x (hidrocortisona = 1). Efecto mineralocorticoide = 0.'},
+  {id:'fc12',mod:'corticosteroides',q:'¿Cuál es la diferencia entre trans-activación y trans-represión?',a:'Trans-represión (GREs-): efectos principales antiinflamatorios.\nTrans-activación (GREs+): asociada a efectos secundarios.'},
+  {id:'fc13',mod:'corticosteroides',q:'¿Cuánto tiempo tarda en evidenciarse el efecto del mecanismo genómico?',a:'Entre 5 minutos y 1 hora (o más). El efecto NO es inmediato — depende del regulador proteico.'},
+  {id:'fc14',mod:'corticosteroides',q:'¿Qué síndrome aparece con terapias de glucocorticoides mayores a 1 mes?',a:'Síndrome de Cushing. Terapia >10 días → Insuficiencia corticosuprarrenal.'},
+  {id:'fc15',mod:'corticosteroides',q:'¿Qué le pasa a los eosinófilos con glucocorticoides?',a:'DISMINUYEN eosinófilos circulantes (antiinflamatorio). Los neutrófilos AUMENTAN.'},
+  {id:'fc16',mod:'corticosteroides',q:'¿Por qué los glucocorticoides producen hiperglicemia?',a:'Estimulan síntesis hepática de glucosa y disminuyen uso de glucosa en tejidos periféricos'},
+  {id:'fc17',mod:'corticosteroides',q:'¿Para qué se usan los corticosteroides en odontología?',a:'Antiinflamatorio (3os molares, ortognática), Inmunosupresor (aftas, pénfigo), Antialérgico (reacciones alérgicas)'},
+  {id:'fc18',mod:'corticosteroides',q:'¿Por qué se prefiere dar glucocorticoides en la mañana?',a:'Para respetar el ritmo circadiano del eje HHA y evitar supresión del eje hipotálamo-hipófisis-adrenal'},
+  {id:'fc19',mod:'corticosteroides',q:'¿Qué es la prednisona?',a:'Un PROFÁRMACO que se convierte en prednisolona (metabolito activo) en el hígado'},
+  {id:'fc20',mod:'corticosteroides',q:'¿Cuáles son los glucocorticoides de acción larga (36–72h)?',a:'Betametasona, Dexametasona, Deflazacort'},
+
+  // ANALGESICOS
+  {id:'fc21',mod:'analgesicos',q:'¿Qué enzima inicia la cascada del ácido araquidónico?',a:'Fosfolipasa A2 (PLA2): libera ácido araquidónico de los fosfolípidos de membrana'},
+  {id:'fc22',mod:'analgesicos',q:'¿Por qué los glucocorticoides bloquean "toda la cascada"?',a:'Porque inhiben la Fosfolipasa A2 → bloquean producción de PGs Y leucotrienos. Los AINEs solo bloquean COX.'},
+  {id:'fc23',mod:'analgesicos',q:'¿Qué es la PGE2 y por qué es importante?',a:'Potente mediador de dolor, inflamación, edema y rubor (signos cardinales). A nivel central: fiebre, hiperalgesia, fatiga.'},
+  {id:'fc24',mod:'analgesicos',q:'¿Qué contrarrest fisiológicamente al TXA2?',a:'La PGI2 (prostaciclina): vasodilatadora y antiagregante vs TXA2 vasoconstrictor/proagregante'},
+  {id:'fc25',mod:'analgesicos',q:'¿Cuánto más potente son los cisteinil-leucotrienos que la histamina?',a:'10 a 1000 veces más potentes como broncoconstrictores (LTC4, LTD4, LTE4)'},
+  {id:'fc26',mod:'analgesicos',q:'¿Cuáles son los 3 efectos principales de los AINEs?',a:'1. Analgésico (dosis bajas) · 2. Antipirético · 3. Antiinflamatorio (dosis más altas, inicio más lento)'},
+  {id:'fc27',mod:'analgesicos',q:'¿Qué tienen en común cinéticamente todos los AINEs?',a:'Ácidos débiles (excepto paracetamol/pirazolonas), alta unión a proteínas >90%, metabolismo hepático, nefrotóxicos'},
+
+  // AINEs
+  {id:'fc28',mod:'aines',q:'¿Cuál AINE tiene mecanismo de acción IRREVERSIBLE?',a:'AAS (ácido acetilsalicílico): acetilación covalente de Ser530 de la COX. Todos los demás son reversibles.'},
+  {id:'fc29',mod:'aines',q:'¿Por qué el paracetamol NO tiene efecto antiinflamatorio periférico?',a:'Porque es un inhibidor central débil de COX-2, sin acción periférica. No controla inflamación local.'},
+  {id:'fc30',mod:'aines',q:'¿Cuál es el grupo de AINEs más usado en odontología?',a:'Derivados del Ácido Propiónico: Ibuprofeno (mejor riesgo/beneficio), Naproxeno (mayor vida media)'},
+  {id:'fc31',mod:'aines',q:'¿Por qué los coxibs tienen más riesgo cardiovascular?',a:'Inhiben COX-2 → ↓ PGI2 (antiagregante) sin ↓ TXA2 (proagregante) → desbalance trombogénico → ACV/IAM'},
+  {id:'fc32',mod:'aines',q:'¿Qué efecto adverso grave tiene la dipirona (metamizol)?',a:'Agranulocitosis (por eso está retirada en muchos países y tiene uso restringido)'},
+  {id:'fc33',mod:'aines',q:'¿Qué es el Síndrome de Reye y con qué se asocia?',a:'Encefalopatía grave + hepatotoxicidad. Asociada a Salicilatos (AAS) en menores de 20 años. CONTRAINDICADO.'},
+  {id:'fc34',mod:'aines',q:'¿Cuál AINE fue descontinuado en Colombia en 2022?',a:'Nimesulida — por riesgo de hepatotoxicidad. Ya no se puede prescribir en Colombia.'},
+  {id:'fc35',mod:'aines',q:'¿Cuáles son los AINEs más gastrolesivos?',a:'Los NO SELECTIVOS (inhiben COX-1 citoprotectora gástrica). Piroxicam e Indometacina especialmente.'},
+  {id:'fc36',mod:'aines',q:'¿Por qué los AINEs son nefrotóxicos si se excretan poco como fármaco activo?',a:'Porque su mecanismo de acción (↓ PGs renales) altera la perfusión y autorregulación renal → nefropatía'}
+];
+
+// ===== QUIZ DATA =====
+
+const quizData = {
+  q1: {
+    title: 'Antihistamínicos',
+    questions: [
+      {q:'¿La histamina actúa como agonista sobre receptores de tipo...?',opts:['Ionotrópico','Metabotrópico','Nuclear','Tirosinquinasa'],ans:1,
+       exp:'Correcto. La histamina actúa sobre receptores metabotrópicos (acoplados a proteína G): H1, H2, H3 y H4.',
+       wrong:'Los receptores ionotrópicos son canales iónicos directos (como en la placa neuromuscular). Los metabotrópicos usan proteínas G como intermediarios.'},
+      {q:'¿Cuál es el mecanismo del receptor H2 de la histamina?',opts:['Estimula liberación de Ca²⁺','Inhibe adenilciclasa','Activa adenilciclasa','Quimiotaxis de células'],ans:2,
+       exp:'H2 activa la adenilciclasa → aumenta AMPc. Esto activa la célula parietal para secretar más ácido.',
+       wrong:'H1 estimula liberación de Ca²⁺. H3 y H4 INHIBEN la adenilciclasa. No confundir dirección.'},
+      {q:'¿Qué antihistamínico se puede usar como alternativa de anestésico local en pacientes alérgicos?',opts:['Loratadina','Cetirizina','Difenhidramina','Fexofenadina'],ans:2,
+       exp:'La Difenhidramina (1ª gen.) puede usarse como anestésico local alternativo en pacientes alérgicos a amidas y ésteres.',
+       wrong:'Loratadina, cetirizina y fexofenadina son 2ª/3ª generación: no sedantes, sin propiedades anestésicas locales.'},
+      {q:'¿Cuál efecto anticolinérgico afecta directamente la salud oral?',opts:['Sedación','Xerostomía','Hipotensión','Midriasis'],ans:1,
+       exp:'La xerostomía (boca seca) predispone a caries, enfermedad periodontal y candidiasis oral.',
+       wrong:'La sedación y la hipotensión son efectos sistémicos. La midriasis afecta los ojos. La xerostomía es el efecto más relevante en odontología.'},
+      {q:'¿Qué estabiliza la membrana de mastocitos y basófilos impidiendo la liberación de histamina?',opts:['Adrenalina','Loratadina','Ketotifeno y cromoglicato sódico','Cetirizina'],ans:2,
+       exp:'Ketotifeno y cromoglicato sódico son inhibidores de la liberación: estabilizan la membrana de mastocitos/basófilos. Efecto antihistamínico más marcado.',
+       wrong:'La adrenalina antagoniza a la histamina de forma NO competitiva (inhibición fisiológica). Loratadina y cetirizina bloquean receptores H1, no la liberación.'},
+      {q:'Los antihistamínicos de 2ª y 3ª generación NO tienen efecto...',opts:['Antihistamínico','Antialérgico','Sedante','Antipruriginoso'],ans:2,
+       exp:'La diferencia clave: son no sedantes porque no atraviesan la BHE (poco liposolubles). También no tienen efectos anticolinérgicos.',
+       wrong:'Siguen siendo antihistamínicos, antialérgicos y antipruriginosos. Solo pierden la sedación y los efectos anticolinérgicos.'},
+      {q:'¿En qué uso odontológico específico se emplean los antihistamínicos de 1ª generación?',opts:['Solo en reacciones alérgicas crónicas','Premedicación anestésica y sedación en consulta ambulatoria','Tratamiento de la xerostomía','Analgesia postoperatoria'],ans:1,
+       exp:'La 1ª generación se usa en sedación y premedicación anestésica en consulta ambulatoria, por su efecto sedante sobre el SNC.',
+       wrong:'Las reacciones alérgicas las maneja cualquier generación. No se usan para xerostomía (la causan). No tienen efecto analgésico significativo.'},
+      {q:'¿Cuál es el receptor H4 y qué función cumple?',opts:['H4: SNC, regula neurotransmisores','H4: corazón, aumenta contractilidad','H4: eosinófilos/neutrófilos, quimiotaxis','H4: bronquios, broncodilatación'],ans:2,
+       exp:'H4 inhibe adenilciclasa y se localiza en eosinófilos y neutrófilos, mediando quimiotaxis de estas células inflamatorias.',
+       wrong:'H3 regula neurotransmisores en SNC. H2 afecta el corazón (aumenta actividad cardíaca). H1 produce broncoconstricción.'},
+      {q:'Una sobredosis de antihistamínico puede causar...',opts:['Miosis, bradicardia','Midriasis, alucinaciones, convulsiones','Hipoglicemia, coma','Broncoconstricción severa'],ans:1,
+       exp:'Sobredosis: midriasis (dilatación pupilar), mareo, alucinaciones y convulsiones. Efectos opuestos a la miosis y bradicardia colinérgica.',
+       wrong:'Los antihistamínicos tienen efectos anticolinérgicos (no colinérgicos), por eso producen midriasis, no miosis.'},
+      {q:'El efecto hipotensor de la histamina mediado por H1 se produce principalmente por...',opts:['Vasoconstricción arterial','Vasodilatación y aumento de ON y PGI₂','Aumento de la frecuencia cardíaca','Retención de sodio renal'],ans:1,
+       exp:'H1 en endotelio vascular produce vasodilatación + aumenta óxido nítrico (ON) + aumenta PGI₂ → efecto hipotensor.',
+       wrong:'La vasoconstricción aumentaría la PA. La FC la aumenta H2. La retención de sodio es efecto mineralocorticoide.'},
+      {q:'¿Con qué medicamentos tienen interacción importante los antihistamínicos de 1ª generación?',opts:['Antibióticos y AINEs','Depresores del SNC, hepatotóxicos e hipotensores','Solo con glucocorticoides','Insulina y anticoagulantes'],ans:1,
+       exp:'Las interacciones más relevantes son con: depresores del SNC (potencian sedación), hepatotóxicos (metabolismo compartido) e hipotensores (suman efecto hipotensor).',
+       wrong:'Antibióticos e insulina no tienen interacción significativa directa con antihistamínicos.'},
+      {q:'¿Por qué los antihistamínicos de 1ª generación tienen más efectos gastrointestinales?',opts:['Porque bloquean receptores H2','Porque son más liposolubles y se distribuyen más a tejidos','Porque tienen menor unión a proteínas','Porque se metabolizan en el intestino'],ans:1,
+       exp:'Al ser más liposolubles, se distribuyen más ampliamente a tejidos, incluyendo el tracto GI y el SNC. También son más inespecíficos.',
+       wrong:'El bloqueo de H2 gastrointestinal es de otros fármacos (ranitidina). La mayor distribución a tejidos por liposolubilidad explica los efectos GI.'}
+    ]
+  },
+  q2: {
+    title: 'Corticosteroides',
+    questions: [
+      {q:'¿Cuál glucocorticoide tiene mayor potencia antiinflamatoria?',opts:['Hidrocortisona (1x)','Metilprednisolona (5x)','Betametasona (25x)','Dexametasona (30x)'],ans:3,
+       exp:'Dexametasona tiene potencia antiinflamatoria de 30x respecto a hidrocortisona, con efecto mineralocorticoide = 0. Por eso es muy usada en cirugías dentales.',
+       wrong:'Betametasona tiene 25x, metilprednisolona 5x, hidrocortisona es la referencia (1x).'},
+      {q:'¿Cuánto tiempo tarda en evidenciarse el efecto del mecanismo genómico de glucocorticoides?',opts:['Inmediato (segundos)','Entre 5 minutos y 1 hora (o más)','24 a 48 horas','Una semana'],ans:1,
+       exp:'El mecanismo genómico requiere transcripción y traducción génica: entre 5 minutos y 1 hora. NO es inmediato. Depende del regulador proteico alterado.',
+       wrong:'El efecto inmediato lo explica el mecanismo NO genómico. El genómico siempre tiene latencia por el proceso de alteración génica.'},
+      {q:'La trans-represión (GREs negativos) en los glucocorticoides está asociada a...',opts:['Efectos secundarios metabólicos','Efectos principales antiinflamatorios e inmunosupresores','Síndrome de Cushing','Insuficiencia corticosuprarrenal'],ans:1,
+       exp:'La trans-represión inhibe factores de transcripción para DISMINUIR mediadores de inflamación → efectos principales (antiinflamatorio/inmunosupresor).',
+       wrong:'Es la trans-ACTIVACIÓN (GREs positivos) la que aumenta expresión de genes y se asocia a la mayoría de los efectos SECUNDARIOS.'},
+      {q:'¿Los glucocorticoides inhiben qué enzima para bloquear toda la cascada inflamatoria?',opts:['COX-1','COX-2','Fosfolipasa A2','5-Lipooxigenasa'],ans:2,
+       exp:'Los glucocorticoides inhiben la Fosfolipasa A2 → bloquean liberación de ácido araquidónico → bloquean PGs Y leucotrienos (toda la cascada).',
+       wrong:'Los AINEs inhiben COX-1/COX-2. Los antileucotrienos inhiben 5-LOX. Solo los glucocorticoides actúan en Fosfolipasa A2 bloqueando toda la cascada.'},
+      {q:'¿Qué efecto producen los glucocorticoides sobre los eosinófilos circulantes?',opts:['Los aumentan','Los disminuyen','No los afectan','Los transforman en neutrófilos'],ans:1,
+       exp:'Los glucocorticoides DISMINUYEN eosinófilos circulantes y AUMENTAN neutrófilos. Este efecto es relevante en alergias y asma.',
+       wrong:'El efecto es opuesto: disminución de eosinófilos (células de inflamación alérgica) con aumento de neutrófilos.'},
+      {q:'¿Qué síndrome grave aparece con terapias de glucocorticoides superiores a 1 mes?',opts:['Síndrome de Reye','Síndrome de Stevens-Johnson','Síndrome de Cushing','Síndrome de abstinencia'],ans:2,
+       exp:'Síndrome de Cushing: obesidad central, facie de luna, joroba, hiperglicemia, osteoporosis. Se desarrolla con terapias largas (>1 mes).',
+       wrong:'Terapia >10 días → insuficiencia corticosuprarrenal. Síndrome de Reye es de salicilatos. Stevens-Johnson es de sulfas y anticonvulsivantes.'},
+      {q:'¿Cuál es el glucocorticoide de acción más corta (<12 horas)?',opts:['Dexametasona','Betametasona','Prednisona','Hidrocortisona'],ans:3,
+       exp:'Hidrocortisona (cortisol) tiene duración de acción corta (<12h). Es el más similar al cortisol endógeno.',
+       wrong:'Dexametasona y Betametasona son de acción larga (36-72h). Prednisona es de acción intermedia (12-36h).'},
+      {q:'¿Por qué la prednisona es un profármaco?',opts:['Se activa en el riñón','Se activa en el intestino','Se convierte en prednisolona en el hígado','Se activa en el sitio de inflamación'],ans:2,
+       exp:'La prednisona se convierte en prednisolona (su metabolito activo) mediante reducción hepática. Pacientes con hepatopatía deben usar directamente prednisolona.',
+       wrong:'El hígado es el sitio de activación. En hepatopatías severas, la conversión puede ser insuficiente.'},
+      {q:'¿En qué condición dental se usan los glucocorticoides como inmunosupresores?',opts:['Caries dental','Periodontitis crónica','Aftas y pénfigo','Fractura mandibular'],ans:2,
+       exp:'En enfermedades autoinmunes de la mucosa oral: aftas (úlceras aftosas) y pénfigo (ampollas autoinmunes). La inmunosupresión reduce la respuesta autoinmune.',
+       wrong:'Caries y periodontitis crónica no son enfermedades autoinmunes (son infecciosas). Fracturas no requieren inmunosupresores.'},
+      {q:'¿Cuál efecto tienen los glucocorticoides sobre los linfocitos T y B?',opts:['Los aumentan','Los disminuyen','Solo afectan linfocitos T','No los afectan'],ans:1,
+       exp:'Los glucocorticoides disminuyen linfocitos T y B (inmunosupresión). Además suprimen inmunoglobulinas IgG, IgA e IgM.',
+       wrong:'La disminución de linfocitos es el mecanismo de inmunosupresión. Por eso aumenta el riesgo de infecciones con el uso prolongado.'},
+      {q:'¿Qué efectos secundarios inmediatos puede generar una dosis carga de glucocorticoides?',opts:['Hipoglicemia, somnolencia','Aumento de PA, insomnio, cambios de ánimo, ansiedad','Bradicardia, hipotensión','Neutropenia, trombocitopenia'],ans:1,
+       exp:'Efectos inmediatos de dosis carga: aumento de PA, mayor estado de alerta, cambios en ánimo, insomnio y ansiedad.',
+       wrong:'Los glucocorticoides suelen causar hiperglicemia (no hipoglicemia). No producen bradicardia ni neutropenia inmediata.'},
+      {q:'¿Por qué se debe evitar el uso de glucocorticoides en esquemas repetidos en períodos cortos?',opts:['Por el riesgo de hepatotoxicidad acumulativa','Por supresión del eje HHA y riesgo de insuficiencia corticosuprarrenal','Por riesgo de resistencia antimicrobiana','Por interacción con anestésicos'],ans:1,
+       exp:'Los esquemas repetidos suprimen el eje Hipotálamo-Hipófisis-Adrenal (HHA), lo que puede llevar a insuficiencia corticosuprarrenal al suspender el medicamento.',
+       wrong:'La hepatotoxicidad no es el principal riesgo. La supresión del eje endocrino es el motivo fundamental de esta recomendación.'}
+    ]
+  },
+  q3: {
+    title: 'Analgésicos - Introducción',
+    questions: [
+      {q:'¿Qué enzima inicia la cascada del ácido araquidónico?',opts:['COX-1','COX-2','Fosfolipasa A2','5-Lipooxigenasa'],ans:2,
+       exp:'La Fosfolipasa A2 (PLA2) libera el ácido araquidónico de los fosfolípidos de membrana ante una lesión o estímulo.',
+       wrong:'COX-1 y COX-2 actúan DESPUÉS sobre el ácido araquidónico ya liberado. La 5-LOX es otra vía posterior.'},
+      {q:'La PGE₂ activa neuronas hipotalámicas generando...',opts:['Broncodilatación','Vasodilatación periférica','Fiebre, hiperalgesia y fatiga sistémica','Anticoagulación'],ans:2,
+       exp:'A nivel central, la PGE₂ activa neuronas hipotalámicas generando fiebre, hiperalgesia (aumento de la percepción del dolor) y fatiga sistémica.',
+       wrong:'La broncodilatación y vasodilatación son efectos de otras prostaglandinas. La anticoagulación es de la PGI₂.'},
+      {q:'¿Cuál es el contrapeso fisiológico del TXA₂?',opts:['LTB4','PGE2','PGI₂ (prostaciclina)','PGD2'],ans:2,
+       exp:'PGI₂ (vasodilatadora, antiagregante) contraresta fisiológicamente al TXA₂ (vasoconstrictor, proagregante). Este balance es crítico en hemostasia vascular.',
+       wrong:'LTB4 es leucotrieno (quimiotaxis). PGE2 tiene efectos mixtos según el receptor. PGD2 es vasodilatador pero no el contrapeso directo del TXA₂.'},
+      {q:'Los cisteinil-leucotrienos producen broncoconstricción...',opts:['Igual a histamina','10–1000 veces más potente que histamina','10 veces menos que histamina','Solo en asma alérgica grave'],ans:1,
+       exp:'LTC₄, LTD₄ y LTE₄ (cisteinil-LTs) producen broncoconstricción 10 a 1000 veces más potente que la histamina. Por eso el asma no responde bien a antihistamínicos solos.',
+       wrong:'Son mucho más potentes, no equivalentes ni inferiores. Actúan en todos los tipos de asma, no solo alérgica.'},
+      {q:'¿Qué diferencia hay entre el bloqueo de los glucocorticoides y los AINEs sobre la cascada inflamatoria?',opts:['No hay diferencia, ambos bloquean todo','Glucocorticoides: solo PGs. AINEs: PGs + leucotrienos','Glucocorticoides: PGs + leucotrienos (toda cascada). AINEs: solo PGs (vía COX)','AINEs bloquean Fosfolipasa A2, glucocorticoides bloquean COX'],ans:2,
+       exp:'Glucocorticoides inhiben Fosfolipasa A2 → bloquean AA → bloquean TODAS las vías (PGs + leucotrienos). AINEs solo bloquean COX → solo vía de prostanoides.',
+       wrong:'Es exactamente al revés. Los glucocorticoides tienen mayor amplitud de acción sobre la cascada completa.'},
+      {q:'¿Cuáles son las características cinéticas comunes de los AINEs?',opts:['Bases débiles, baja unión a proteínas','Ácidos débiles, alta unión a proteínas plasmáticas >90%','Bases fuertes, distribución solo en plasma','Neutros, sin unión a proteínas'],ans:1,
+       exp:'Los AINEs son ácidos débiles (excepto paracetamol y pirazolonas), con alta unión a proteínas plasmáticas >90%, metabolismo hepático y excreción renal.',
+       wrong:'Son ácidos débiles (no bases) porque esto permite su buena absorción en el medio ácido gástrico. La alta unión proteica es clave para sus interacciones.'},
+      {q:'¿Cuándo se logra el efecto antiinflamatorio de los AINEs?',opts:['Con dosis bajas (iguales al efecto analgésico)','Con una sola toma','Con dosis más altas y de inicio más lento (días)','Solo por vía intravenosa'],ans:2,
+       exp:'El efecto antiinflamatorio requiere dosis MÁS ALTAS que las analgésicas y tiene inicio más lento (días). El efecto analgésico es más rápido y a dosis menores.',
+       wrong:'Las dosis bajas logran analgesia pero no antiinflamación suficiente. La vía no determina el efecto, la dosis sí.'},
+      {q:'¿Cuál es el mecanismo principal de los AINEs?',opts:['Bloqueo de Fosfolipasa A2','Antagonismo de receptores H1','Bloqueo reversible competitivo de la ciclooxigenasa (COX)','Inhibición de la síntesis de leucotrienos'],ans:2,
+       exp:'El mecanismo principal es la inhibición de la síntesis de prostaglandinas mediante bloqueo reversible competitivo de la COX.',
+       wrong:'La Fosfolipasa A2 la bloquean los glucocorticoides. Los leucotrienos los bloquean los antileucotrienos. H1 lo bloquean los antihistamínicos.'},
+      {q:'¿Cuál es la función del montelukast?',opts:['Inhibe COX-2','Antagonista de receptores CysLT1 (leucotrienos)','Inhibe Fosfolipasa A2','Bloquea receptores H1'],ans:1,
+       exp:'Montelukast es antagonista de receptores CysLT1 (cisteinil-leucotrienos). Se usa en asma y rinitis alérgica para bloquear broncoconstricción por leucotrienos.',
+       wrong:'COX lo bloquean los AINEs. Fosfolipasa A2 los glucocorticoides. H1 los antihistamínicos.'},
+      {q:'¿Qué prostaglandina tiene potente efecto broncoconstrictor en crisis asmáticas?',opts:['PGE₂ (EP2)','PGI₂','PGD₂ (vía DP2/CRTH2)','PGE₂ (EP4)'],ans:2,
+       exp:'PGD₂ (vía receptores DP2/CRTH2) tiene potente efecto broncoconstrictor en crisis asmáticas y participa en reacciones alérgicas.',
+       wrong:'PGE₂ (EP2) y PGI₂ tienen efecto broncodilatador. PGD₂ via DP1 produce vasodilatación, pero via DP2 produce broncoconstricción y respuestas alérgicas.'}
+    ]
+  },
+  q4: {
+    title: 'AINEs - Grupos Químicos',
+    questions: [
+      {q:'¿Cuál AINE tiene mecanismo de acción IRREVERSIBLE?',opts:['Ibuprofeno','Diclofenaco','AAS (Ácido acetilsalicílico)','Paracetamol'],ans:2,
+       exp:'AAS actúa por acetilación covalente de la Ser530 de la COX → bloqueo IRREVERSIBLE. Por eso como antiagregante se da una vez al día (dosis baja 75-100mg).',
+       wrong:'Todos los demás AINEs tienen bloqueo reversible competitivo. Solo el AAS es irreversible, lo que tiene implicaciones en manejo preoperatorio.'},
+      {q:'¿Por qué el paracetamol NO tiene efecto antiinflamatorio periférico?',opts:['Porque inhibe solo COX-1','Porque es inhibidor central débil de COX-2, sin acción periférica','Porque es una base débil','Porque bloquea Fosfolipasa A2'],ans:1,
+       exp:'Paracetamol tiene inhibición central débil de COX-2 (y posibles mecanismos serotoninérgicos/cannabinoides), pero NO tiene actividad antiinflamatoria en el tejido periférico.',
+       wrong:'No inhibe COX-1 preferentemente. No es una base débil (es neutro). No bloquea PLA2 (eso es glucocorticoides).'},
+      {q:'¿Cuál grupo de AINEs es el más usado en odontología?',opts:['Salicilatos','Derivados del ácido propiónico','Coxibs','Oxicam'],ans:1,
+       exp:'Derivados del ácido propiónico (ibuprofeno, naproxeno, dexketoprofeno) son los más usados en odontología. Ibuprofeno tiene el mejor perfil riesgo/beneficio.',
+       wrong:'Salicilatos tienen síndrome de Reye <20 años. Coxibs tienen riesgo cardiovascular. Oxicam tiene vida media muy larga para dolor agudo dental.'},
+      {q:'¿Por qué los coxibs tienen mayor riesgo cardiovascular?',opts:['Porque aumentan TXA₂','Porque disminuyen PGI₂ sin disminuir TXA₂','Porque producen vasoconstricción directa','Porque inhiben COX-1'],ans:1,
+       exp:'Coxibs inhiben selectivamente COX-2 → ↓ PGI₂ (vasodilatadora/antiagregante) sin ↓ TXA₂ (vasoconstrictor/proagregante) → desequilibrio que favorece trombosis.',
+       wrong:'Los coxibs NO inhiben COX-1 (ni TXA₂ se genera por COX-1). Es el desequilibrio PGI₂/TXA₂ lo que genera el riesgo cardiovascular.'},
+      {q:'¿Cuál AINE fue descontinuado en Colombia desde 2022?',opts:['Celecoxib','Meloxicam','Nimesulida','Piroxicam'],ans:2,
+       exp:'Nimesulida fue descontinuada en Colombia en 2022 por riesgo de hepatotoxicidad. Era débil selectivo COX-2.',
+       wrong:'Celecoxib y meloxicam siguen en uso. Piroxicam tiene alta gastrolesividad pero no fue descontinuado.'},
+      {q:'¿Cuál AINE tiene el mayor riesgo de agranulocitosis?',opts:['Ibuprofeno','Paracetamol','Dipirona (metamizol)','Ketorolaco'],ans:2,
+       exp:'La dipirona (metamizol) tiene riesgo de agranulocitosis, por lo que está retirada del mercado en muchos países. En Colombia es de uso restringido.',
+       wrong:'Ibuprofeno, paracetamol y ketorolaco no tienen asociación significativa con agranulocitosis.'},
+      {q:'El Síndrome de Reye se asocia con salicilatos en...',opts:['Adultos mayores de 60 años','Embarazadas','Menores de 20 años','Pacientes con IRC'],ans:2,
+       exp:'El Síndrome de Reye (encefalopatía + hepatotoxicidad grave) se asocia al uso de salicilatos (AAS) en menores de 20 años. CONTRAINDICADO en este grupo.',
+       wrong:'No es exclusivo de niños pequeños — aplica hasta los 20 años. No es especialmente relevante en adultos mayores ni embarazadas (aunque hay otras contraindicaciones).'},
+      {q:'¿Cuáles AINEs son los MÁS gastrolesivos?',opts:['Los selectivos COX-2 (coxibs)','Los preferencial COX-2 (meloxicam)','Los no selectivos (inhiben COX-1 y COX-2)','El paracetamol'],ans:2,
+       exp:'Los NO selectivos inhiben COX-1 (que produce PGs citoprotectoras de la mucosa gástrica) → mayor gastrolesividad. Coxibs: menor daño gástrico.',
+       wrong:'Los coxibs precisamente se desarrollaron para REDUCIR la gastrolesividad (inhibición selectiva COX-2). El paracetamol no es gastrolesivo.'},
+      {q:'El meloxicam se clasifica como...',opts:['No selectivo','Selectivo COX-2 (coxib)','Preferencial débil COX-2','Inhibidor de Fosfolipasa A2'],ans:2,
+       exp:'Meloxicam tiene preferencia por COX-2 pero no es selectivo puro (no es coxib). Se clasifica como preferencial débil COX-2, con mejor perfil GI que piroxicam.',
+       wrong:'Los coxibs son celecoxib y etoricoxib. Meloxicam es oxicam con preferencia COX-2, no un coxib verdadero.'},
+      {q:'¿Cuál AINE tiene la mayor potencia analgésica por vía parenteral?',opts:['Ibuprofeno parenteral','Naproxeno','Ketorolaco','Piroxicam'],ans:2,
+       exp:'El ketorolaco es un derivado del ácido acético con alta potencia analgésica, especialmente por vía parenteral. Se usa cuando se requiere analgesia potente sin opioides.',
+       wrong:'Ibuprofeno no tiene presentación parenteral eficiente. Naproxeno tiene vida media larga pero menor potencia analgésica inmediata.'},
+      {q:'¿Cuál es la interacción más peligrosa de los AINEs en práctica clínica?',opts:['Con antibióticos penicilínicos','Con anticoagulantes (orales/parenterales)','Con antifúngicos','Con antihipertensivos calcioantagonistas'],ans:1,
+       exp:'AINEs + anticoagulantes = MAYOR RIESGO DE SANGRADO. Los AINEs inhiben agregación plaquetaria (especialmente AAS) y causan gastrolesividad; con anticoagulantes el riesgo se multiplica.',
+       wrong:'La interacción con antibióticos y antifúngicos no es clínicamente significativa. Con calcioantagonistas hay interacción menor.'},
+      {q:'¿Por qué los AINEs son nefrotóxicos si se excretan <1% como fármaco activo?',opts:['Porque se acumulan en el riñón','Porque su mecanismo de acción inhibe PGs renales que mantienen la perfusión renal','Porque son ácidos y dañan los túbulos','Porque compiten con secreción tubular'],ans:1,
+       exp:'Las PGs renales (especialmente PGE₂ y PGI₂) mantienen la perfusión renal y la filtración glomerular. Al inhibirlas, los AINEs comprometen la función renal.',
+       wrong:'No se acumulan en el riñón. La acidez no es el mecanismo de daño. El mecanismo es funcional (inhibición de PGs vasodilatadoras renales).'}
+    ]
+  }
+};
+
+// Simulacro questions (20 mixed)
+const simulacroQuestions = [
+  {q:'¿Cuál receptor de histamina media la broncoconstricción?',opts:['H2','H1','H3','H4'],ans:1,mod:'💊 Antihistamínicos',
+   exp:'H1 media broncoconstricción, vasodilatación, prurito y dolor. H2 media secreción ácida gástrica.',wrong:'H2 activa adenilciclasa en célula parietal. H3 y H4 son inhibitorios sobre adenilciclasa.'},
+  {q:'¿Cuál glucocorticoide tiene mayor potencia antiinflamatoria?',opts:['Prednisona','Hidrocortisona','Betametasona','Dexametasona (30x)'],ans:3,mod:'🧬 Corticosteroides',
+   exp:'Dexametasona = 30x potencia antiinflamatoria con efecto mineralocorticoide = 0.',wrong:'Betametasona es 25x, prednisona 4x, hidrocortisona es la referencia (1x).'},
+  {q:'¿Cuál AINE actúa de forma IRREVERSIBLE?',opts:['Ibuprofeno','AAS','Diclofenaco','Meloxicam'],ans:1,mod:'💡 AINEs',
+   exp:'AAS acetila covalentemente Ser530 de la COX → bloqueo irreversible. Base del uso como antiagregante.',wrong:'Todos los demás AINEs son reversibles competitivos.'},
+  {q:'¿Cuál es el principal efecto anticolinérgico de los antihistamínicos en la cavidad oral?',opts:['Hemorragia gingival','Xerostomía','Hiperplasia gingival','Pigmentación dental'],ans:1,mod:'💊 Antihistamínicos',
+   exp:'Xerostomía → caries, enfermedad periodontal y candidiasis. Es el efecto bucal más importante.',wrong:'La hiperplasia gingival es de fenitoína y ciclosporina. El sangrado y pigmentación no son de antihistamínicos.'},
+  {q:'¿Qué síndrome aparece con terapias de glucocorticoides mayores a 1 mes?',opts:['Síndrome de Reye','Insuficiencia corticosuprarrenal','Síndrome de Cushing','Síndrome de Stevens-Johnson'],ans:2,mod:'🧬 Corticosteroides',
+   exp:'Cushing: obesidad central, facie de luna, joroba, hiperglicemia, osteoporosis. Terapia >10 días → insuficiencia corticosuprarrenal.',wrong:'El síndrome de Reye es de salicilatos en <20 años. Insuficiencia suprarrenal aparece antes (>10 días).'},
+  {q:'¿El paracetamol tiene efecto antiinflamatorio periférico?',opts:['Sí, inhibe COX-1 periférica','Sí, idéntico al ibuprofeno','No, es inhibidor central débil de COX-2','Sí, a dosis muy altas'],ans:2,mod:'💡 AINEs',
+   exp:'Paracetamol NO tiene acción antiinflamatoria periférica. Solo actúa como analgésico y antipirético vía mecanismos centrales.',wrong:'No inhibe COX-1 periférica de forma relevante. No comparte el perfil del ibuprofeno.'},
+  {q:'¿Qué contraresta fisiológicamente al TXA₂?',opts:['LTB4','PGD2','PGI₂ (prostaciclina)','PGF2α'],ans:2,mod:'🔬 Analgésicos Intro',
+   exp:'PGI₂: vasodilatadora y antiagregante. TXA₂: vasoconstrictor y proagregante. Balance crítico en hemostasia.',wrong:'LTB4 es leucotrieno quimioatractor. PGD2 y PGF2α tienen otros roles.'},
+  {q:'La trans-represión de glucocorticoides (GREs negativos) está asociada a...',opts:['Efectos secundarios','Síndrome de Cushing','Efectos principales antiinflamatorios','Insuficiencia suprarrenal'],ans:2,mod:'🧬 Corticosteroides',
+   exp:'Trans-represión (GREs-) → inhibe factores de transcripción pro-inflamatorios → efectos PRINCIPALES. Trans-activación → efectos secundarios.',wrong:'Es la trans-ACTIVACIÓN la que genera efectos secundarios.'},
+  {q:'¿Cuál antihistamínico puede usarse como alternativa anestésica local?',opts:['Loratadina','Difenhidramina','Cetirizina','Fexofenadina'],ans:1,mod:'💊 Antihistamínicos',
+   exp:'Difenhidramina (1ª gen.) tiene propiedades anestésicas locales, útil en alérgicos a amidas y ésteres.',wrong:'Loratadina, cetirizina y fexofenadina son 2ª/3ª generación, no sedantes y sin acción anestésica local.'},
+  {q:'¿Cuál es la broncoconstricción de los cisteinil-leucotrienos versus histamina?',opts:['Igual','10 veces menor','10–1000 veces más potente','Solo en asma severa'],ans:2,mod:'🔬 Analgésicos Intro',
+   exp:'LTC₄, LTD₄, LTE₄: 10–1000x más broncoconstrictores que histamina. Explicación del asma grave.',wrong:'Son mucho más potentes. El asma responde mal a antihistamínicos solos por esto.'},
+  {q:'¿Cuál es el riesgo principal de los coxibs (selectivos COX-2)?',opts:['Gastrolesividad','Nefrotoxicidad aguda','Riesgo cardiovascular (trombosis)','Agranulocitosis'],ans:2,mod:'💡 AINEs',
+   exp:'Coxibs: ↓ PGI₂ sin ↓ TXA₂ → desequilibrio trombogénico → infarto y ACV. Contraindicados en ICC y cardiopatía isquémica.',wrong:'Los coxibs se crearon PARA reducir gastrolesividad. Su problema es cardiovascular.'},
+  {q:'¿Qué inhiben los glucocorticoides para bloquear toda la cascada inflamatoria?',opts:['COX-1','COX-2','5-Lipooxigenasa','Fosfolipasa A2'],ans:3,mod:'🧬 Corticosteroides',
+   exp:'Al inhibir Fosfolipasa A2, bloquean la liberación de ácido araquidónico → sin sustrato para ninguna vía (ni COX ni LOX).',wrong:'COX-1 y COX-2 los bloquean los AINEs. 5-LOX los antileucotrienos. Solo glucocorticoides van tan arriba en la cascada.'},
+  {q:'Los antihistamínicos de 2ª y 3ª generación NO tienen...',opts:['Efecto antihistamínico','Efecto antipruriginoso','Efecto sedante ni efectos anticolinérgicos','Efecto antialérgico'],ans:2,mod:'💊 Antihistamínicos',
+   exp:'La diferencia fundamental: 2ª/3ª gen. no cruzan BHE, no producen sedación ni tienen efectos anticolinérgicos.',wrong:'Siguen siendo antihistamínicos, antipruriginosos y antialérgicos. Solo pierden sedación y anticolinérgicos.'},
+  {q:'¿Cuál AINE fue descontinuado en Colombia en 2022 por hepatotoxicidad?',opts:['Celecoxib','Nimesulida','Meloxicam','Piroxicam'],ans:1,mod:'💡 AINEs',
+   exp:'Nimesulida (sulfonamida, débil selectivo COX-2) fue descontinuada en Colombia en 2022 por riesgo de hepatotoxicidad.',wrong:'Celecoxib y meloxicam siguen disponibles. Piroxicam tiene gastrolesividad pero no fue descontinuado.'},
+  {q:'¿Para qué se logra el efecto antiinflamatorio de los AINEs?',opts:['Dosis bajas, inicio rápido','Dosis bajas, inicio lento','Dosis altas, inicio lento (días)','Dosis altas, inicio rápido'],ans:2,mod:'🔬 Analgésicos Intro',
+   exp:'Antiinflamación requiere dosis más altas y tiene inicio más lento (días). El efecto analgésico se logra antes y con menores dosis.',wrong:'No hay antiinflamación eficaz a dosis bajas. Tampoco es de inicio rápido.'},
+  {q:'¿Cuánto tiempo tarda en evidenciarse el efecto del mecanismo genómico de glucocorticoides?',opts:['Inmediato (segundos)','5 minutos a 1 hora o más','24 a 48 horas','1 semana'],ans:1,mod:'🧬 Corticosteroides',
+   exp:'El mecanismo genómico requiere transcripción génica: latencia de 5 min a 1 hora. El mecanismo NO genómico explica respuestas más inmediatas.',wrong:'El efecto no es inmediato. Tampoco tan tardío como 24–48h.'},
+  {q:'El Síndrome de Reye asociado a salicilatos ocurre en...',opts:['Adultos mayores de 65 años','Menores de 20 años','Solo en niños menores de 5 años','Embarazadas en primer trimestre'],ans:1,mod:'💡 AINEs',
+   exp:'Síndrome de Reye (encefalopatía + hepatotoxicidad) con AAS en <20 años. No solo niños pequeños.',wrong:'El riesgo es hasta los 20 años, no solo en niños pequeños.'},
+  {q:'¿Cómo actúa el ketotifeno/cromoglicato sódico sobre la histamina?',opts:['Bloquean receptores H1','Bloquean receptores H2','Estabilizan membrana de mastocitos (inhiben liberación)','Neutralizan histamina circulante'],ans:2,mod:'💊 Antihistamínicos',
+   exp:'Ketotifeno y cromoglicato son estabilizadores de mastocitos → impiden la LIBERACIÓN de histamina. Efecto antihistamínico más marcado.',wrong:'Son inhibidores de liberación, no antagonistas de receptores. No neutralizan la histamina circulante.'},
+  {q:'¿Los glucocorticoides aumentan o disminuyen los eosinófilos circulantes?',opts:['Los aumentan','No los afectan','Los disminuyen','Los transforman en basófilos'],ans:2,mod:'🧬 Corticosteroides',
+   exp:'Los glucocorticoides DISMINUYEN eosinófilos y AUMENTAN neutrófilos. Importante en tratamiento de asma y alergias.',wrong:'Es disminución, no aumento. Efecto clave del mecanismo antiinflamatorio/antialérgico.'},
+  {q:'¿Cuáles AINEs tienen mayor gastrolesividad?',opts:['Coxibs selectivos COX-2','No selectivos (inhiben COX-1 y COX-2)','Paracetamol','Preferencial débil COX-2 como meloxicam'],ans:1,mod:'💡 AINEs',
+   exp:'NO selectivos inhiben COX-1 → ↓ PGs citoprotectoras de mucosa gástrica (PGE₂, PGI₂) → mayor gastrolesividad.',wrong:'Los coxibs se desarrollaron precisamente para REDUCIR la gastrolesividad (no inhiben COX-1).'}
+];
+
+// ===== STATE =====
+let progress = JSON.parse(localStorage.getItem('farmacoProgress')||'{"quizScores":{},"fcSeen":[],"fcDifficult":[],"simAttempts":0,"simBestScore":null,"quizHistory":[]}');
+let currentFC = 0, fcFiltered = [...flashcards], fcShowDifficultOnly = false;
+let currentQuiz = null, quizIdx = 0, quizCorrect = 0, quizAnswered = false;
+let simIdx = 0, simCorrect = 0, simAnswered = false, simQuestions = [];
+
+// ===== NAVIGATION =====
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('quizContainer').style.display = 'none';
+  document.getElementById('quizResultDiv').style.display = 'none';
+  window.scrollTo(0,0);
+  if(id==='flashcards') renderFC();
+  if(id==='progreso') renderProgress();
+  if(id==='simulacro') renderSimStart();
+  if(id==='dashboard') updateDashboard();
+  closeSidebar();
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ===== COLLAPSE BLOCKS =====
+function toggleCB(header){
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.cb-arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ===== FLASHCARDS =====
+function setFCFilter(mod){
+  document.querySelectorAll('.fc-filter').forEach(b=>b.classList.remove('active'));
+  const btn = [...document.querySelectorAll('.fc-filter')].find(b=>b.getAttribute('onclick').includes("'"+mod+"'"));
+  if(btn) btn.classList.add('active');
+  fcShowDifficultOnly = false;
+  document.getElementById('fcDiffFilter').textContent = '⚡ Solo difíciles';
+  fcFiltered = mod==='all' ? [...flashcards] : flashcards.filter(f=>f.mod===mod);
+  currentFC = 0;
+  renderFC();
+}
+function renderFC(){
+  if(!fcFiltered.length){
+    document.getElementById('fcQ').textContent = 'No hay tarjetas en este filtro.';
+    document.getElementById('fcA').textContent = '';
+    return;
+  }
+  document.getElementById('fcInner').classList.remove('flipped');
+  const fc = fcFiltered[currentFC];
+  document.getElementById('fcQ').textContent = fc.q;
+  document.getElementById('fcA').textContent = fc.a;
+  document.getElementById('fcCounter').textContent = `Tarjeta ${currentFC+1} de ${fcFiltered.length}`;
+  const difficult = progress.fcDifficult.includes(fc.id);
+  document.getElementById('fcDiffBtn').textContent = difficult ? '✅ Quitar difícil' : '🔴 Difícil';
+  // mark as seen
+  if(!progress.fcSeen.includes(fc.id)){progress.fcSeen.push(fc.id);saveProgress();}
+  updateDiffCount();
+}
+function flipCard(){document.getElementById('fcInner').classList.toggle('flipped');}
+function fcNext(){if(currentFC<fcFiltered.length-1){currentFC++;renderFC();}}
+function fcPrev(){if(currentFC>0){currentFC--;renderFC();}}
+function markFCDifficult(){
+  const fc = fcFiltered[currentFC];
+  const idx = progress.fcDifficult.indexOf(fc.id);
+  if(idx===-1) progress.fcDifficult.push(fc.id);
+  else progress.fcDifficult.splice(idx,1);
+  saveProgress();renderFC();
+}
+function fcShuffle(){
+  for(let i=fcFiltered.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcFiltered[i],fcFiltered[j]]=[fcFiltered[j],fcFiltered[i]];}
+  currentFC=0;renderFC();
+}
+function fcOnlyDifficult(){
+  fcShowDifficultOnly = !fcShowDifficultOnly;
+  if(fcShowDifficultOnly){
+    const base = [...flashcards];
+    fcFiltered = base.filter(f=>progress.fcDifficult.includes(f.id));
+    document.getElementById('fcDiffFilter').textContent = '📋 Ver todas';
+    if(!fcFiltered.length){fcFiltered=[...flashcards];alert('No tienes tarjetas marcadas como difíciles.');}
+  } else {
+    fcFiltered = [...flashcards];
+    document.getElementById('fcDiffFilter').textContent = '⚡ Solo difíciles';
+  }
+  currentFC=0;renderFC();
+}
+function updateDiffCount(){
+  const n = progress.fcDifficult.length;
+  document.getElementById('fcDiffCount').textContent = n>0 ? `🔴 Tienes ${n} tarjeta(s) marcada(s) como difícil` : '';
+}
+
+// ===== QUIZ ENGINE =====
+function startQuiz(qid){
+  currentQuiz = qid; quizIdx=0; quizCorrect=0; quizAnswered=false;
+  const qData = quizData[qid];
+  showSection('quizzes', document.querySelectorAll('.nav-item')[8]);
+  document.getElementById('quizContainer').style.display='block';
+  document.getElementById('quizResultDiv').style.display='none';
+  document.querySelectorAll('#quizzes > *').forEach(el=>{if(el.id!=='quizContainer') el.style.display='none';});
+  renderQuizQ();
+}
+function renderQuizQ(){
+  const qData = quizData[currentQuiz];
+  if(quizIdx >= qData.questions.length){showQuizResult();return;}
+  const q = qData.questions[quizIdx];
+  quizAnswered=false;
+  document.getElementById('quizProgBar').style.width = ((quizIdx/qData.questions.length)*100)+'%';
+  document.getElementById('quizNum').textContent = `Pregunta ${quizIdx+1} de ${qData.questions.length}`;
+  document.getElementById('quizScoreDisplay').textContent = `✅ ${quizCorrect}`;
+  document.getElementById('quizQ').textContent = q.q;
+  document.getElementById('quizExpl').className='explanation';
+  document.getElementById('quizExpl').style.display='none';
+  document.getElementById('quizActions').innerHTML='';
+  const letters=['A','B','C','D'];
+  document.getElementById('quizOpts').innerHTML = q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="answerQuiz(${i})"><span class="opt-letter">${letters[i]}</span>${o}</button>`
+  ).join('');
+}
+function answerQuiz(idx){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  const q = quizData[currentQuiz].questions[quizIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach((o,i)=>{
+    o.classList.add('locked');
+    if(i===q.ans) o.classList.add('correct');
+    else if(i===idx && idx!==q.ans) o.classList.add('wrong');
+  });
+  const isCorrect = idx===q.ans;
+  if(isCorrect) quizCorrect++;
+  const expl = document.getElementById('quizExpl');
+  expl.style.display='block';
+  expl.className = 'explanation show '+(isCorrect?'correct':'wrong');
+  expl.innerHTML = isCorrect
+    ? `<strong>✅ ¡Correcto!</strong> ${q.exp}`
+    : `<strong>❌ Incorrecto.</strong> ${q.wrong}<br><br><strong>✅ Respuesta correcta:</strong> ${q.opts[q.ans]}<br>${q.exp}`;
+  document.getElementById('quizActions').innerHTML = `<button class="btn btn-primary" onclick="quizNext()">Siguiente →</button>`;
+}
+function quizNext(){quizIdx++;renderQuizQ();}
+function showQuizResult(){
+  const qData = quizData[currentQuiz];
+  const total = qData.questions.length;
+  const pct = Math.round((quizCorrect/total)*100);
+  document.getElementById('quizContainer').querySelector('.quiz-wrap').style.display='none';
+  const resultDiv = document.getElementById('quizResultDiv');
+  resultDiv.style.display='block';
+  document.getElementById('rScore').textContent = `${quizCorrect}/${total}`;
+  const labels = pct>=90?'🌟 ¡Excelente dominio!':pct>=70?'👍 Muy bien, sigue practicando':pct>=50?'📚 Bien, repasa los temas fallados':'💪 Necesitas repasar más este módulo';
+  document.getElementById('rLabel').textContent = labels;
+  const details = document.getElementById('rDetails');
+  details.innerHTML = `
+    <div class="rd-row"><span>Módulo</span><strong>${qData.title}</strong></div>
+    <div class="rd-row"><span>Correctas</span><span style="color:var(--green)">${quizCorrect} / ${total}</span></div>
+    <div class="rd-row"><span>Porcentaje</span><span style="color:var(--rose-dark);font-weight:600">${pct}%</span></div>
+    <div class="rd-row"><span>Calificación</span><span>${pct>=90?'A ⭐':pct>=70?'B 👍':pct>=50?'C 📚':'D 💪'}</span></div>
+  `;
+  // Save score
+  if(!progress.quizScores[currentQuiz] || progress.quizScores[currentQuiz].pct < pct){
+    progress.quizScores[currentQuiz]={pct,correct:quizCorrect,total};
+  }
+  progress.quizHistory.unshift({quiz:currentQuiz,title:qData.title,pct,date:new Date().toLocaleDateString('es-CO')});
+  if(progress.quizHistory.length>20) progress.quizHistory.pop();
+  saveProgress();
+  updateScoreBadges();
+  updateDashboard();
+}
+function retryQuiz(){
+  document.getElementById('quizContainer').querySelector('.quiz-wrap').style.display='block';
+  document.getElementById('quizResultDiv').style.display='none';
+  startQuiz(currentQuiz);
+}
+function closeQuiz(){
+  document.getElementById('quizContainer').style.display='none';
+  document.getElementById('quizResultDiv').style.display='none';
+  document.querySelectorAll('#quizzes > *').forEach(el=>{ el.style.display=''; });
+}
+function updateScoreBadges(){
+  ['q1','q2','q3','q4'].forEach(qid=>{
+    const el = document.getElementById('score_'+qid);
+    if(!el) return;
+    const sc = progress.quizScores[qid];
+    if(sc){ el.textContent=`${sc.pct}% · ${sc.correct}/${sc.total}`; el.className='badge badge-green'; }
+  });
+}
+
+// ===== SIMULACRO =====
+function renderSimStart(){
+  document.getElementById('simBestScore').textContent = progress.simBestScore!==null ? progress.simBestScore+'%' : '—';
+  document.getElementById('simAttempts').textContent = progress.simAttempts||0;
+}
+function startSimulacro(){
+  document.getElementById('simStart').style.display='none';
+  document.getElementById('simResult').style.display='none';
+  document.getElementById('simQuizWrap').style.display='block';
+  simQuestions = shuffle([...simulacroQuestions]);
+  simIdx=0; simCorrect=0; simAnswered=false;
+  renderSimQ();
+}
+function renderSimQ(){
+  if(simIdx>=simQuestions.length){showSimResult();return;}
+  const q = simQuestions[simIdx];
+  simAnswered=false;
+  document.getElementById('simProgBar').style.width=((simIdx/simQuestions.length)*100)+'%';
+  document.getElementById('simNum').textContent=`Pregunta ${simIdx+1} de ${simQuestions.length}`;
+  document.getElementById('simScoreDisp').textContent=`✅ ${simCorrect}`;
+  document.getElementById('simModTag').innerHTML=`<span class="tag tag-rose">${q.mod}</span>`;
+  document.getElementById('simQ').textContent=q.q;
+  document.getElementById('simExpl').className='explanation';
+  document.getElementById('simExpl').style.display='none';
+  document.getElementById('simActions').innerHTML='';
+  const letters=['A','B','C','D'];
+  document.getElementById('simOpts').innerHTML = q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="answerSim(${i})"><span class="opt-letter">${letters[i]}</span>${o}</button>`
+  ).join('');
+}
+function answerSim(idx){
+  if(simAnswered) return;
+  simAnswered=true;
+  const q = simQuestions[simIdx];
+  const opts = document.querySelectorAll('#simOpts .quiz-opt');
+  opts.forEach((o,i)=>{
+    o.classList.add('locked');
+    if(i===q.ans) o.classList.add('correct');
+    else if(i===idx && idx!==q.ans) o.classList.add('wrong');
+  });
+  const isCorrect = idx===q.ans;
+  if(isCorrect) simCorrect++;
+  const expl = document.getElementById('simExpl');
+  expl.style.display='block';
+  expl.className='explanation show '+(isCorrect?'correct':'wrong');
+  expl.innerHTML = isCorrect
+    ? `<strong>✅ ¡Correcto!</strong> ${q.exp}`
+    : `<strong>❌ Incorrecto.</strong> ${q.wrong}<br><br><strong>✅ Respuesta:</strong> ${q.opts[q.ans]}<br>${q.exp}`;
+  document.getElementById('simActions').innerHTML=`<button class="btn btn-primary" onclick="simNext()">Siguiente →</button>`;
+}
+function simNext(){simIdx++;renderSimQ();}
+function showSimResult(){
+  document.getElementById('simQuizWrap').style.display='none';
+  document.getElementById('simResult').style.display='block';
+  const total=simQuestions.length;
+  const pct=Math.round((simCorrect/total)*100);
+  document.getElementById('simEmoji').textContent=pct>=90?'🏆':pct>=70?'🎉':pct>=50?'📚':'💪';
+  document.getElementById('simFinalScore').textContent=`${simCorrect}/${total}`;
+  document.getElementById('simFinalLabel').textContent=pct>=90?'¡Dominas el contenido!':pct>=70?'¡Muy bien! Estás lista.':pct>=50?'Bien, pero repasa los temas fallados':'Necesitas repasar más. ¡Tú puedes!';
+  // Analysis by module
+  const byMod = {};
+  simQuestions.forEach((q,i)=>{
+    const correct = /* check if answered correctly */ true; // we lost track, do simpler analysis
+    if(!byMod[q.mod]) byMod[q.mod]={mod:q.mod,count:0};
+    byMod[q.mod].count++;
+  });
+  const analysisDiv = document.getElementById('simAnalysis');
+  analysisDiv.innerHTML = `
+    <div class="rd-row"><span>Total correctas</span><span style="color:var(--green)">${simCorrect}/${total}</span></div>
+    <div class="rd-row"><span>Porcentaje final</span><span style="color:var(--rose-dark);font-weight:700">${pct}%</span></div>
+    <div class="rd-row"><span>Resultado</span><span>${pct>=90?'A ⭐ Aprobado con distinción':pct>=60?'B 👍 Aprobado':'C ⚠️ Repasa antes del parcial'}</span></div>
+    <div style="margin-top:8px;font-size:13px;color:var(--text-muted)">
+      ${pct<70?'<strong>Recomendación:</strong> Repasa los módulos donde fallaste y vuelve a intentar el simulacro.':'<strong>¡Excelente preparación!</strong> Practica las flashcards de los temas difíciles.'}
+    </div>
+  `;
+  progress.simAttempts = (progress.simAttempts||0)+1;
+  if(progress.simBestScore===null || pct>progress.simBestScore) progress.simBestScore=pct;
+  saveProgress();
+  renderSimStart();
+}
+
+// ===== PROGRESS =====
+function renderProgress(){
+  const fcSeenCount = progress.fcSeen.length;
+  const qCompleted = Object.keys(progress.quizScores).length;
+  const avgScore = qCompleted ? Math.round(Object.values(progress.quizScores).reduce((a,b)=>a+b.pct,0)/qCompleted) : 0;
+  const total = Math.round((qCompleted/4*50)+(fcSeenCount/36*30)+(progress.simAttempts>0?20:0));
+  document.getElementById('progTotal').textContent=total+'%';
+  document.getElementById('progTotalBar').style.width=total+'%';
+  document.getElementById('progQuizzes').textContent=`${qCompleted}/4`;
+  document.getElementById('progFC').textContent=fcSeenCount;
+  document.getElementById('progSim').textContent=progress.simAttempts||0;
+  // Module scores
+  const modInfo = [
+    {id:'q1',name:'💊 Antihistamínicos'},{id:'q2',name:'🧬 Corticosteroides'},
+    {id:'q3',name:'🔬 Analgésicos Intro'},{id:'q4',name:'💡 AINEs Grupos'}
+  ];
+  document.getElementById('moduleScoreList').innerHTML = modInfo.map(m=>{
+    const sc = progress.quizScores[m.id];
+    if(!sc) return `<div class="pk-item"><div class="pk-num">—</div><div class="pk-text"><strong>${m.name}</strong><div style="font-size:12px;color:var(--text-muted)">No completado aún</div></div></div>`;
+    const color = sc.pct>=70?'var(--green)':sc.pct>=50?'var(--orange)':'var(--red)';
+    return `<div class="pk-item"><div class="pk-num" style="background:${color}">${sc.pct}%</div><div class="pk-text"><strong>${m.name}</strong><div style="font-size:12px;color:var(--text-muted)">${sc.correct}/${sc.total} correctas · Mejor puntaje</div></div></div>`;
+  }).join('');
+  // History
+  const hist = progress.quizHistory;
+  if(hist.length){
+    document.getElementById('quizHistory').innerHTML=hist.slice(0,10).map(h=>
+      `<div style="padding:7px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span>${h.title}</span><span style="font-weight:600;color:${h.pct>=70?'var(--green)':'var(--red)'}">${h.pct}% · ${h.date}</span></div>`
+    ).join('');
+  }
+}
+function resetProgress(){
+  if(confirm('¿Reiniciar todo el progreso?')){
+    progress={quizScores:{},fcSeen:[],fcDifficult:[],simAttempts:0,simBestScore:null,quizHistory:[]};
+    saveProgress();updateDashboard();renderProgress();updateScoreBadges();alert('Progreso reiniciado.');
+  }
+}
+function saveProgress(){localStorage.setItem('farmacoProgress',JSON.stringify(progress));}
+
+// ===== DASHBOARD =====
+function updateDashboard(){
+  const qCompleted = Object.keys(progress.quizScores).length;
+  const fcSeenCount = progress.fcSeen.length;
+  const total = Math.round((qCompleted/4*50)+(fcSeenCount/36*30)+(progress.simAttempts>0?20:0));
+  document.getElementById('dashPct').textContent = total+'% completado';
+  document.getElementById('sidebarProgress').style.width=total+'%';
+  document.getElementById('sidebarPct').textContent=total+'%';
+  const mods = ['q1','q2','q3','q4'];
+  mods.forEach((qid,i)=>{
+    const pct = progress.quizScores[qid]?.pct||0;
+    const barEl = document.getElementById('p'+(i+1));
+    const pctEl = document.getElementById('pct'+(i+1));
+    if(barEl) barEl.style.width=pct+'%';
+    if(pctEl) pctEl.textContent=pct+'%';
+  });
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll',()=>{
+  const btn = document.getElementById('scrollTop');
+  btn.classList.toggle('show', window.scrollY>300);
+});
+
+// ===== INIT =====
+updateDashboard();
+updateScoreBadges();
+renderFC();
+renderSimStart();
+document.addEventListener('DOMContentLoaded',()=>{renderFC();});
+</script>
+</main>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FarmacoStudy · Odontología 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#fdfafa;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.wrap{max-width:520px;width:100%;text-align:center}
+.badge{display:inline-block;background:#fce8f0;color:#8a3c5a;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:20px}
+h1{font-family:'Playfair Display',serif;font-size:2.2rem;color:#1e1e2e;line-height:1.2;margin-bottom:8px}
+h1 span{color:#d4799a}
+.sub{color:#7a7a8c;font-size:.95rem;margin-bottom:40px}
+.cards{display:flex;flex-direction:column;gap:16px}
+.card{display:block;text-decoration:none;background:#fff;border:1.5px solid #f0e0e8;border-radius:16px;padding:24px 28px;text-align:left;transition:all .2s;cursor:pointer}
+.card:hover{border-color:#d4799a;box-shadow:0 8px 32px rgba(212,121,154,.15);transform:translateY(-2px)}
+.card-row{display:flex;align-items:center;gap:16px}
+.card-ico{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.card-ico.c1{background:#fce8f0}
+.card-ico.c2{background:#eaf2fc}
+.card-info{}
+.card-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.card-tag.c1{color:#d4799a}
+.card-tag.c2{color:#4a7ec8}
+.card-title{font-size:1.05rem;font-weight:700;color:#1e1e2e;margin-bottom:3px}
+.card-desc{font-size:.84rem;color:#7a7a8c;line-height:1.5}
+.card-arrow{margin-left:auto;color:#d0d0e0;font-size:1.2rem;flex-shrink:0}
+.card:hover .card-arrow{color:#d4799a}
+.footer{margin-top:32px;color:#b0b0c0;font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="badge">Farmacología · Odontología · Parcial 2026</div>
+  <h1>Elige tu<br><span>modo de estudio</span></h1>
+  <p class="sub">Dos recursos distintos para preparar el parcial</p>
+
+  <div class="cards">
+    <a class="card" href="FarmacoRepaso.html">
+      <div class="card-row">
+        <div class="card-ico c1">📖</div>
+        <div class="card-info">
+          <div class="card-tag c1">Lectura rápida</div>
+          <div class="card-title">FarmacoRepaso</div>
+          <div class="card-desc">Libro de repaso visual · scroll continuo · 3 módulos · diagramas + texto corto</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </div>
+    </a>
+
+    <a class="card" href="Estudio Farmaco.html">
+      <div class="card-row">
+        <div class="card-ico c2">🎓</div>
+        <div class="card-info">
+          <div class="card-tag c2">Práctica interactiva</div>
+          <div class="card-title">Estudio Farmaco</div>
+          <div class="card-desc">Flashcards · Quizzes · Simulacro final · Seguimiento de progreso</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer">Antihistamínicos · Corticosteroides · AINEs</div>
+</div>
+</body>
+</html>
